@@ -1,0 +1,46 @@
+<script>
+    // 检查用户是否已登录
+    function checkLoginStatus() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName') || '用户';
+        const navAuthElement = document.getElementById('nav-auth');
+        
+        if (isLoggedIn && userEmail) {
+            // 用户已登录，显示用户头像和下拉菜单
+            const userInitial = userName.charAt(0).toUpperCase();
+            navAuthElement.innerHTML = `
+                <div class="relative group">
+                    <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                            ${userInitial}
+                        </div>
+                        <span class="hidden md:inline">${userName}</span>
+                    </a>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                        <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                    </div>
+                </div>
+            `;
+            
+            // 添加退出登录功能
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userName');
+                window.location.reload();
+            });
+        } else {
+            // 用户未登录，显示登录和注册按钮
+            navAuthElement.innerHTML = `
+                <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+            `;
+        }
+    }
+    
+    // 页面加载时检查登录状态
+    document.addEventListener('DOMContentLoaded', checkLoginStatus);
+</script> 

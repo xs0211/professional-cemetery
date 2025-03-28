@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业墓场 - 职业排行榜</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- 导航栏部分 -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <a href="index.html" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-gray-700 text-lg">Professional Cemetery</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
+                    <a href="ranking.html" class="py-4 px-2 text-blue-600 border-b-2 border-blue-600 font-semibold">排行榜</a>
+                    <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
+                    <div id="nav-auth" class="flex items-center space-x-1">
+                        <!-- 这里将由JavaScript动态填充登录/注册按钮或用户信息 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- 标题部分 -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">职业排行榜</h1>
+            <p class="text-gray-600">了解AI时代各类职业的发展趋势</p>
+        </div>
+
+        <!-- 标签切换部分 -->
+        <div class="mb-6 border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                <li class="mr-2">
+                    <a href="#" class="tab-link inline-block p-4 border-b-2 border-blue-600 rounded-t-lg text-blue-600 active" data-tab="low-risk">
+                        低风险职业
+                    </a>
+                </li>
+                <li class="mr-2">
+                    <a href="#" class="tab-link inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="high-risk">
+                        高风险职业
+                    </a>
+                </li>
+                <li class="mr-2">
+                    <a href="#" class="tab-link inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="extinct">
+                        已消亡职业
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 排行榜内容部分 -->
+        <div class="animate__animated animate__fadeIn">
+            <!-- 低风险职业排行榜 -->
+            <div id="low-risk" class="tab-content active">
+                <table class="w-full bg-white rounded-lg shadow-md overflow-hidden">
+                    <thead class="bg-green-600 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">排名</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">职业</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">安全指数</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">1</td>
+                            <td class="px-6 py-4 font-medium">数据科学家</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">96%</td>
+                            <td class="px-6 py-4 text-gray-600">需求增长迅速，AI替代风险低</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">2</td>
+                            <td class="px-6 py-4 font-medium">人工智能工程师</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">95%</td>
+                            <td class="px-6 py-4 text-gray-600">技术前沿，薪资水平高</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">3</td>
+                            <td class="px-6 py-4 font-medium">医疗保健专家</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">93%</td>
+                            <td class="px-6 py-4 text-gray-600">需要人性化关怀，难以被AI完全替代</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">4</td>
+                            <td class="px-6 py-4 font-medium">软件开发工程师</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">91%</td>
+                            <td class="px-6 py-4 text-gray-600">需求持续增长，创造性工作</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">5</td>
+                            <td class="px-6 py-4 font-medium">心理咨询师</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">90%</td>
+                            <td class="px-6 py-4 text-gray-600">情感理解和人际互动是核心</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">6</td>
+                            <td class="px-6 py-4 font-medium">网络安全专家</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">89%</td>
+                            <td class="px-6 py-4 text-gray-600">需求持续增长，技术更新快</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">7</td>
+                            <td class="px-6 py-4 font-medium">教育工作者</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">87%</td>
+                            <td class="px-6 py-4 text-gray-600">教育需要人际互动和情感连接</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">8</td>
+                            <td class="px-6 py-4 font-medium">创意设计师</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">85%</td>
+                            <td class="px-6 py-4 text-gray-600">创造力和审美判断是核心竞争力</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">9</td>
+                            <td class="px-6 py-4 font-medium">物理治疗师</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">84%</td>
+                            <td class="px-6 py-4 text-gray-600">需要身体接触和个性化治疗</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">10</td>
+                            <td class="px-6 py-4 font-medium">管理顾问</td>
+                            <td class="px-6 py-4 text-green-600 font-semibold">82%</td>
+                            <td class="px-6 py-4 text-gray-600">需要复杂决策和人际沟通能力</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 高风险职业排行榜 -->
+            <div id="high-risk" class="tab-content">
+                <table class="w-full bg-white rounded-lg shadow-md overflow-hidden">
+                    <thead class="bg-red-600 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">排名</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">职业</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">风险指数</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">1</td>
+                            <td class="px-6 py-4 font-medium">数据录入员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">95%</td>
+                            <td class="px-6 py-4 text-gray-600">自动化数据处理技术快速发展</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">2</td>
+                            <td class="px-6 py-4 font-medium">收银员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">92%</td>
+                            <td class="px-6 py-4 text-gray-600">自助结账和移动支付普及</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">3</td>
+                            <td class="px-6 py-4 font-medium">电话销售员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">89%</td>
+                            <td class="px-6 py-4 text-gray-600">AI语音助手和自动化营销系统替代</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">4</td>
+                            <td class="px-6 py-4 font-medium">银行柜员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">87%</td>
+                            <td class="px-6 py-4 text-gray-600">网上银行和自动化服务普及</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">5</td>
+                            <td class="px-6 py-4 font-medium">快递分拣员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">85%</td>
+                            <td class="px-6 py-4 text-gray-600">自动化分拣系统快速发展</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">6</td>
+                            <td class="px-6 py-4 font-medium">保险核保员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">83%</td>
+                            <td class="px-6 py-4 text-gray-600">AI算法可高效处理风险评估</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">7</td>
+                            <td class="px-6 py-4 font-medium">会计文员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">81%</td>
+                            <td class="px-6 py-4 text-gray-600">财务软件自动化程度提高</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">8</td>
+                            <td class="px-6 py-4 font-medium">仓库管理员</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">79%</td>
+                            <td class="px-6 py-4 text-gray-600">自动化仓储系统和机器人应用</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">9</td>
+                            <td class="px-6 py-4 font-medium">出租车司机</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">77%</td>
+                            <td class="px-6 py-4 text-gray-600">自动驾驶技术发展迅速</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">10</td>
+                            <td class="px-6 py-4 font-medium">客服代表</td>
+                            <td class="px-6 py-4 text-red-600 font-semibold">75%</td>
+                            <td class="px-6 py-4 text-gray-600">AI聊天机器人能处理大部分查询</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 已消亡职业排行榜 -->
+            <div id="extinct" class="tab-content">
+                <table class="w-full bg-white rounded-lg shadow-md overflow-hidden">
+                    <thead class="bg-gray-700 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">排名</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">职业</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">消亡年代</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">替代技术</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">1</td>
+                            <td class="px-6 py-4 font-medium">传真机操作员</td>
+                            <td class="px-6 py-4">2010年</td>
+                            <td class="px-6 py-4 text-gray-600">电子邮件和即时通讯工具</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">2</td>
+                            <td class="px-6 py-4 font-medium">电影放映员</td>
+                            <td class="px-6 py-4">2015年</td>
+                            <td class="px-6 py-4 text-gray-600">数字放映技术</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">3</td>
+                            <td class="px-6 py-4 font-medium">打字员</td>
+                            <td class="px-6 py-4">2000年</td>
+                            <td class="px-6 py-4 text-gray-600">个人电脑普及</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">4</td>
+                            <td class="px-6 py-4 font-medium">电话接线员</td>
+                            <td class="px-6 py-4">2005年</td>
+                            <td class="px-6 py-4 text-gray-600">自动电话交换系统</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">5</td>
+                            <td class="px-6 py-4 font-medium">胶片冲印师</td>
+                            <td class="px-6 py-4">2010年</td>
+                            <td class="px-6 py-4 text-gray-600">数码相机和打印技术</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">6</td>
+                            <td class="px-6 py-4 font-medium">录像带租赁店员</td>
+                            <td class="px-6 py-4">2013年</td>
+                            <td class="px-6 py-4 text-gray-600">流媒体服务</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">7</td>
+                            <td class="px-6 py-4 font-medium">人工计算员</td>
+                            <td class="px-6 py-4">1980年</td>
+                            <td class="px-6 py-4 text-gray-600">计算器和电子表格</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">8</td>
+                            <td class="px-6 py-4 font-medium">灯塔守护员</td>
+                            <td class="px-6 py-4">1990年</td>
+                            <td class="px-6 py-4 text-gray-600">自动化灯塔系统</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">9</td>
+                            <td class="px-6 py-4 font-medium">电报员</td>
+                            <td class="px-6 py-4">1999年</td>
+                            <td class="px-6 py-4 text-gray-600">电话和互联网通信</td>
+                        </tr>
+                        <tr class="odd:bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <td class="px-6 py-4">10</td>
+                            <td class="px-6 py-4 font-medium">人工导航员</td>
+                            <td class="px-6 py-4">2000年</td>
+                            <td class="px-6 py-4 text-gray-600">GPS导航系统</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- 消亡职业详细说明 -->
+                <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">消亡职业详解</h3>
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">📦 传真机操作员</h4>
+                            <p class="text-gray-600">
+                                电子邮件和即时通讯工具的普及使得传真机及相关操作岗位几乎完全消失，现代办公环境中已很少见到传真机。在1980-2000年间，传真机操作员负责发送、接收和分发传真文件，是办公室的重要岗位。
+                            </p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">📞 电话接线员</h4>
+                            <p class="text-gray-600">
+                                自动电话交换系统的发展使得人工接线员这一曾经庞大的职业群体几乎完全消失。在20世纪初至中期，电话接线员需要手动连接电话线路，是通信系统的核心环节。
+                            </p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">⌨️ 打字员</h4>
+                            <p class="text-gray-600">
+                                个人电脑的普及使得专业打字员岗位消失，现代办公环境中每个人都需要具备基本的打字能力。在打字机时代，打字员是办公室中不可或缺的专业人员，负责将手写稿件转换为打字文档。
+                            </p>
+                        </div>
+                        
+                        <div class="border-b pb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">📰 人工计算员</h4>
+                            <p class="text-gray-600">
+                                在电子计算器和计算机普及前，大型工程、科研项目和金融机构都雇佣专业计算员进行复杂数学计算。这些计算员通常是数学专业毕业生，使用计算尺和算盘等工具进行工作。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-2">📠 电报员</h4>
+                            <p class="text-gray-600">
+                                电报曾是远距离通信的主要方式，电报员负责使用摩尔斯电码发送和接收信息。随着电话和互联网的普及，电报服务在全球范围内逐渐停止，最后一个商业电报服务于2006年在美国结束。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚部分 -->
+    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
+            <p>© 2023 AI职业墓场. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有标签链接和内容区域
+            const tabLinks = document.querySelectorAll('.tab-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // 为每个标签链接添加点击事件
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 获取目标标签ID
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // 移除所有标签链接的活动状态
+                    tabLinks.forEach(link => {
+                        link.classList.remove('text-blue-600', 'border-blue-600', 'active');
+                        link.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+                    });
+                    
+                    // 添加当前标签链接的活动状态
+                    this.classList.add('text-blue-600', 'border-blue-600', 'active');
+                    this.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+                    
+                    // 隐藏所有标签内容
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // 显示目标标签内容
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // 检查用户是否已登录
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const navAuthElement = document.getElementById('nav-auth');
+            
+            if (isLoggedIn && userEmail) {
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                navAuthElement.innerHTML = `
+                    <div class="relative group">
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                ${userInitial}
+                            </div>
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加退出登录功能
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userName');
+                    window.location.reload();
+                });
+            } else {
+                // 用户未登录，显示登录和注册按钮
+                navAuthElement.innerHTML = `
+                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                `;
+            }
+        }
+        
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+    </script>
+</body>
+</html> 

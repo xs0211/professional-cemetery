@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI职业预测 - 消亡职业</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        details[open] .details-content {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- 导航栏部分 -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <a href="#" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-gray-700 text-lg">AI职业预测</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <a href="home.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
+                    <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
+                    <a href="extinct_jobs.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">消亡职业</a>
+                    <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- 标题部分 -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">消亡职业</h1>
+            <p class="text-gray-600">以下职业在未来可能因自动化而消失</p>
+        </div>
+
+        <!-- 消亡职业列表部分 -->
+        <div class="space-y-4">
+            <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📦 收银员</summary>
+                <div class="mt-2 text-gray-600 pl-4">
+                    自助结账和移动支付的普及使得收银员岗位面临消亡。
+                </div>
+            </details>
+
+            <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📞 电话推销员</summary>
+                <div class="mt-2 text-gray-600 pl-4">
+                    智能客服和自动化营销系统的广泛应用正在取代传统电话推销员。
+                </div>
+            </details>
+
+            <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">⌨️ 数据录入员</summary>
+                <div class="mt-2 text-gray-600 pl-4">
+                    自动化数据采集和处理技术使得人工数据录入岗位逐渐被淘汰。
+                </div>
+            </details>
+
+            <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📰 报纸印刷工</summary>
+                <div class="mt-2 text-gray-600 pl-4">
+                    数字媒体的兴起导致传统印刷行业萎缩，相关岗位需求大幅减少。
+                </div>
+            </details>
+
+            <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📠 传真机操作员</summary>
+                <div class="mt-2 text-gray-600 pl-4">
+                    电子邮件和即时通讯工具的普及使得传真机及相关操作岗位逐渐消失。
+                </div>
+            </details>
+        </div>
+    </main>
+
+    <!-- 页脚部分 -->
+    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
+            <p>© 2023 AI职业预测. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 为details元素添加动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const details = document.querySelectorAll('details');
+            
+            details.forEach(detail => {
+                detail.addEventListener('toggle', function() {
+                    if (this.open) {
+                        const content = this.querySelector('.details-content');
+                        content.classList.add('animate__animated', 'animate__fadeIn');
+                        
+                        // 移除动画类，以便下次点击时重新添加
+                        setTimeout(() => {
+                            content.classList.remove('animate__animated', 'animate__fadeIn');
+                        }, 1000);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

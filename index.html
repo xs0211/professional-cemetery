@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业墓场 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .job-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .job-item.active .job-details {
+            max-height: 200px;
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- 导航栏部分 -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <a href="index.html" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-gray-700 text-lg">Professional Cemetery</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-blue-600 border-b-2 border-blue-600 font-semibold">首页</a>
+                    <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
+                    <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
+                    <div id="nav-auth" class="flex items-center space-x-1">
+                        <!-- 这里将由JavaScript动态填充登录/注册按钮或用户信息 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- 标语部分 -->
+        <div class="text-center animate__animated animate__fadeInDown">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">我的工作会被AI取代吗</h1>
+            <p class="text-gray-600 mb-8">基于人工智能技术，为您提供未来职业发展趋势分析</p>
+        </div>
+
+    <!-- 搜索表单部分 -->
+        <div class="max-w-md mx-auto mb-4">
+            <form action="query_result.html" method="GET">
+                <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                    <input type="text" name="q" class="flex-1 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入职业名称...">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 hover:bg-blue-700 transition-colors">搜索</button>
+                </div>
+                </form>
+        </div>
+        
+        <!-- 热门搜索职业 -->
+        <div class="max-w-md mx-auto mb-16 text-center">
+            <p class="text-sm text-gray-500 mb-2">热门搜索：</p>
+            <div class="flex flex-wrap justify-center gap-2">
+                <a href="query_result.html?q=软件工程师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">软件工程师</a>
+                <a href="query_result.html?q=教师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">教师</a>
+                <a href="query_result.html?q=会计" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">会计</a>
+                <a href="query_result.html?q=医生" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">医生</a>
+                <a href="query_result.html?q=律师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">律师</a>
+                <a href="query_result.html?q=设计师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">设计师</a>
+            </div>
+            </div>
+            
+        <!-- 职业排行榜部分 -->
+        <div class="space-y-8">
+            <!-- 高风险职业排行 -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">高风险职业排行</h2>
+                    <a href="ranking.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium">查看更多</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">数据录入员</h3>
+                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">高风险</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">随着OCR技术和自动化数据处理的发展，数据录入工作正在被快速替代。</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">银行柜员</h3>
+                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">高风险</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">移动支付和自动化银行服务的普及使得传统柜员需求大幅下降。</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">电话销售</h3>
+                            <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">高风险</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">AI语音助手和自动化营销工具正在取代传统电话销售岗位。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 低风险职业排行 -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">低风险职业排行</h2>
+                    <a href="ranking.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium">查看更多</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">心理咨询师</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">低风险</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">需要高度情感智能和人际互动，AI难以完全替代人类咨询师的共情能力。</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">护理人员</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">低风险</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">需要身体照料和情感支持，这些人性化服务在短期内难以被AI替代。</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">创意设计师</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">低风险</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">需要原创性思维和审美判断，AI可以辅助但难以取代人类的创造力。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 已消亡职业 -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">已消亡职业</h2>
+                    <a href="ranking.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium">查看更多</a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">电报员</h3>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">已消亡</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">随着电话和互联网的普及，电报服务已基本消失，电报员这一职业也随之消亡。</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">人工计算员</h3>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">已消亡</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">在计算机发明前，大型计算需要人工计算员，这一职业已被计算机完全取代。</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-semibold text-gray-800">打字员</h3>
+                            <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded">已消亡</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">个人电脑普及后，专职打字员这一职业基本消失，现代办公人员都需要具备打字能力。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 用户评价部分 -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">用户评价</h2>
+            
+            <div class="relative">
+                <!-- 评价轮播容器 -->
+                <div class="overflow-hidden">
+                    <div class="testimonial-container relative">
+                        <!-- 评价组1 -->
+                        <div class="testimonial-group flex flex-col md:flex-row gap-6 transition-all duration-500" style="transform: translateX(0); opacity: 1;">
+                            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold mr-4">L</div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">李先生</h3>
+                                        <p class="text-gray-500 text-sm">软件工程师</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600">"通过这个平台的职业测评，我更清楚地了解到了AI对我职业的潜在影响。测评结果给出的建议非常实用，帮助我制定了更有针对性的职业发展计划。"</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold mr-4">W</div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">王女士</h3>
+                                        <p class="text-gray-500 text-sm">会计</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600">"作为一名传统行业的从业者，我一直担心自己的工作会被AI取代。这个平台不仅分析了风险，还提供了具体的技能提升建议，让我对未来更有信心。"</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 评价组2 -->
+                        <div class="testimonial-group flex flex-col md:flex-row gap-6 absolute top-0 left-0 w-full transition-all duration-500" style="transform: translateX(100%); opacity: 0;">
+                            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold mr-4">Z</div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">张先生</h3>
+                                        <p class="text-gray-500 text-sm">教师</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600">"平台提供的教育行业分析非常深入，让我了解到虽然AI会改变教学方式，但教师的核心价值仍然不可替代。这让我更加明确了自己的职业发展方向。"</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold mr-4">C</div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">陈女士</h3>
+                                        <p class="text-gray-500 text-sm">设计师</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600">"作为创意行业从业者，我很担心AI生成设计会影响我的工作。通过平台的分析，我了解到如何将AI作为工具提升效率，而不是将其视为威胁。"</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 评价组3 -->
+                        <div class="testimonial-group flex flex-col md:flex-row gap-6 absolute top-0 left-0 w-full transition-all duration-500" style="transform: translateX(100%); opacity: 0;">
+                            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold mr-4">H</div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">黄先生</h3>
+                                        <p class="text-gray-500 text-sm">医生</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600">"平台对医疗行业的分析非常准确，指出了AI在辅助诊断方面的优势，同时也强调了医患关系中人类医生不可替代的价值。这让我对未来医疗的发展有了新的认识。"</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mr-4">L</div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">刘女士</h3>
+                                        <p class="text-gray-500 text-sm">人力资源</p>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600">"人力资源工作正在被AI工具改变，这个平台帮助我理解了哪些工作内容可能被自动化，哪些仍需要人类的判断和情感智能。非常实用的分析！"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 导航按钮 -->
+                <button id="prev-testimonial" class="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none hidden md:block">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button id="next-testimonial" class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 focus:outline-none hidden md:block">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                
+                <!-- 导航点 -->
+                <div class="flex justify-center mt-6">
+                    <span class="testimonial-dot w-3 h-3 rounded-full bg-blue-600 mx-1 cursor-pointer"></span>
+                    <span class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 mx-1 cursor-pointer"></span>
+                    <span class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 mx-1 cursor-pointer"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚部分 -->
+    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
+            <p>© 2023 AI职业墓场. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 检查用户是否已登录
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const navAuthElement = document.getElementById('nav-auth');
+            
+            if (isLoggedIn && userEmail) {
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                navAuthElement.innerHTML = `
+                    <div class="relative group">
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                ${userInitial}
+                            </div>
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加退出登录功能
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userName');
+                    window.location.reload();
+                });
+            } else {
+                // 用户未登录，显示登录和注册按钮
+                navAuthElement.innerHTML = `
+                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                `;
+            }
+        }
+        
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            checkLoginStatus();
+            
+            // 职业详情展开/收起功能
+            const jobItems = document.querySelectorAll('.job-item');
+            jobItems.forEach(item => {
+                const header = item.querySelector('.job-header');
+                header.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+            
+            // 评价轮播功能
+            const testimonialGroups = document.querySelectorAll('.testimonial-group');
+            const dots = document.querySelectorAll('.testimonial-dot');
+            const prevButton = document.getElementById('prev-testimonial');
+            const nextButton = document.getElementById('next-testimonial');
+            
+            let currentIndex = 0;
+            const totalGroups = testimonialGroups.length;
+            
+            // 自动轮播计时器
+            let autoplayTimer;
+            
+            // 更新显示状态的函数
+            function updateTestimonials() {
+                testimonialGroups.forEach((group, index) => {
+                    if (index === currentIndex) {
+                        group.style.transform = 'translateX(0)';
+                        group.style.opacity = '1';
+                    } else if (index < currentIndex) {
+                        group.style.transform = 'translateX(-100%)';
+                        group.style.opacity = '0';
+                    } else {
+                        group.style.transform = 'translateX(100%)';
+                        group.style.opacity = '0';
+                    }
+                });
+                
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.remove('bg-gray-300');
+                        dot.classList.add('bg-blue-600');
+                    } else {
+                        dot.classList.remove('bg-blue-600');
+                        dot.classList.add('bg-gray-300');
+                    }
+                });
+            }
+            
+            // 下一组评价
+            function nextTestimonial() {
+                currentIndex = (currentIndex + 1) % totalGroups;
+                updateTestimonials();
+                resetAutoplay();
+            }
+            
+            // 上一组评价
+            function prevTestimonial() {
+                currentIndex = (currentIndex - 1 + totalGroups) % totalGroups;
+                updateTestimonials();
+                resetAutoplay();
+            }
+            
+            // 重置自动轮播计时器
+            function resetAutoplay() {
+                clearInterval(autoplayTimer);
+                startAutoplay();
+            }
+            
+            // 开始自动轮播
+            function startAutoplay() {
+                autoplayTimer = setInterval(nextTestimonial, 5000); // 每5秒切换一次
+            }
+            
+            // 点击导航点切换到指定组
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateTestimonials();
+                    resetAutoplay();
+                });
+            });
+            
+            // 点击前进/后退按钮
+            if (prevButton) prevButton.addEventListener('click', prevTestimonial);
+            if (nextButton) nextButton.addEventListener('click', nextTestimonial);
+            
+            // 初始化自动轮播
+            startAutoplay();
+        });
+    </script>
+</body>
+</html> 

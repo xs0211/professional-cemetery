@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业墓场 - 个人主页</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-gray-50">
+
+    <!-- 导航栏部分 -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <a href="index.html" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-gray-700 text-lg">Professional Cemetery</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
+                    <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
+                    <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
+                    <div id="nav-auth" class="flex items-center space-x-1">
+                        <!-- 这里将由JavaScript动态填充登录/注册按钮或用户信息 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- 个人信息卡片 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-3xl font-bold mb-4 md:mb-0 md:mr-6">
+                    <span id="user-initial">U</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800 mb-2" id="user-name">用户名</h1>
+                    <p class="text-gray-600 mb-4" id="user-email">user@example.com</p>
+                    <div class="flex space-x-4">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">编辑资料</button>
+                        <button id="logout-btn" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors">退出登录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评记录部分 -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">我的测评记录</h2>
+            
+            <div id="assessment-records" class="space-y-6">
+                <!-- 测评记录将在这里动态生成 -->
+            </div>
+            
+            <!-- 无记录时显示 -->
+            <div id="no-records" class="hidden text-center py-8">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-gray-500 mb-4">您还没有进行过职业测评</p>
+                <a href="assessment.html" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">开始测评</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚部分 -->
+    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
+            <p>© 2023 AI职业墓场. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 检查用户是否已登录
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const navAuthElement = document.getElementById('nav-auth');
+            
+            if (isLoggedIn && userEmail) {
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                navAuthElement.innerHTML = `
+                    <div class="relative group">
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                ${userInitial}
+                            </div>
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加退出登录功能
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userName');
+                    window.location.reload();
+                });
+            } else {
+                // 用户未登录，显示登录和注册按钮
+                navAuthElement.innerHTML = `
+                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                `;
+            }
+        }
+        
+        // 页面加载时检查登录状态和加载用户数据
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            checkLoginStatus();
+            
+            // 检查用户是否已登录
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userName = localStorage.getItem('userName') || '用户';
+            const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+            
+            if (!isLoggedIn) {
+                // 用户未登录，重定向到登录页面
+                window.location.href = 'login.html?redirect=profile.html';
+                return;
+            }
+            
+            // 更新用户信息显示
+            document.getElementById('user-name').textContent = userName;
+            document.getElementById('user-email').textContent = userEmail;
+            document.getElementById('user-initial').textContent = userName.charAt(0).toUpperCase();
+            
+            // 退出登录按钮
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                window.location.href = 'index.html';
+            });
+            
+            // 获取测评记录
+            const assessmentRecords = JSON.parse(localStorage.getItem('assessmentRecords') || '[]');
+            const recordsContainer = document.getElementById('assessment-records');
+            const noRecordsElement = document.getElementById('no-records');
+            
+            if (assessmentRecords.length > 0) {
+                // 有测评记录，显示记录列表
+                noRecordsElement.classList.add('hidden');
+                
+                assessmentRecords.forEach((record, index) => {
+                    const recordElement = document.createElement('div');
+                    recordElement.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
+                    
+                    let riskLevelClass = 'text-green-600';
+                    let riskLevelText = '低风险';
+                    
+                    if (record.riskLevel === 'high' || record.score >= 26) {
+                        riskLevelClass = 'text-red-600';
+                        riskLevelText = '高风险';
+                    } else if (record.riskLevel === 'medium' || record.score >= 17) {
+                        riskLevelClass = 'text-orange-600';
+                        riskLevelText = '中等风险';
+                    } else if (record.riskLevel === 'low' || record.score >= 8) {
+                        riskLevelClass = 'text-yellow-600';
+                        riskLevelText = '低风险';
+                    } else {
+                        riskLevelClass = 'text-green-600';
+                        riskLevelText = '无风险';
+                    }
+                    
+                    recordElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-semibold text-gray-800 mb-1">${record.job}</h3>
+                                <p class="text-sm text-gray-500 mb-2">测评时间: ${record.date}</p>
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-600 mr-2">风险等级:</span>
+                                    <span class="font-semibold ${riskLevelClass}">${riskLevelText}</span>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 rounded-full w-12 h-12 flex items-center justify-center">
+                                <span class="font-bold text-gray-700">${record.score}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <a href="assessment_result.html?job=${encodeURIComponent(record.job)}&total_score=${record.score}&risk_level=${record.riskLevel}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">查看详情</a>
+                        </div>
+                    `;
+                    
+                    recordsContainer.appendChild(recordElement);
+                });
+            } else {
+                // 无测评记录，显示提示信息
+                noRecordsElement.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html> 
