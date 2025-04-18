@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业墓场 - 软件工程师分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .login-required {
+            position: relative;
+        }
+        
+        .blur-content {
+            position: relative;
+        }
+        
+        .filter {
+            filter: blur(4px);
+            pointer-events: none;
+        }
+        
+        .blur-content > div:last-child {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <!-- 加载导航栏脚本 -->
+    <script src="nav-component.js"></script>
+    
+    <!-- 导航栏容器 -->
+    <div id="nav-container"></div>
+
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- 结果展示部分 -->
+        <div class="animate__animated animate__fadeInUp space-y-8">
+            <!-- 职业概览卡片 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h2 class="text-3xl font-bold text-orange-500 mb-4">软件工程师</h2>
+                <p class="text-gray-300 mb-6">软件工程师是一种以编写和维护软件为主要职责的职业，涵盖从需求分析、程序设计、编码实现到测试部署的整个软件开发流程。全球软件开发者数量在2021年约为2680万，预计2030年将增长到4500万。</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">AI替代风险</h3>
+                        <p class="text-lg font-bold text-blue-400">中等</p>
+                </div>
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">平均薪资</h3>
+                        <p class="text-lg font-bold text-blue-400">￥25,000</p>
+                    </div>
+                    <div class="bg-gray-700 p-4 rounded-lg">
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">未来需求</h3>
+                        <p class="text-lg font-bold text-blue-400">高</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI替代风险分析卡片 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold text-orange-500 mb-4">AI替代风险分析</h3>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-300 mb-2">整体风险趋势</h4>
+                        <p class="text-gray-400">随着生成式AI的崛起，软件工程师面临的工作内容被AI侵蚀的风险不断上升。据OpenAI研究，约80%的劳动者至少有10%的工作任务会受到GPT等大语言模型的影响，19%的劳动者有一半以上的任务将受到显著影响。高收入职业往往面临更大的AI曝露率，而软件工程师正属于高收入、高技能职业。GitHub的一项开发者调查显示，97% 的开发者已经在工作中使用AI编程助手。</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-300 mb-2">不同级别工程师的风险差异</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-gray-700 border border-gray-600 rounded-lg">
+                                <thead class="bg-gray-600">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider border-b border-gray-500">工程师级别</th>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider border-b border-gray-500">风险指数</th>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider border-b border-gray-500">主要原因</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-600">
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-100">初级工程师</td>
+                                        <td class="py-3 px-4 text-sm text-red-400 font-semibold">高 (75%)</td>
+                                        <td class="py-3 px-4 text-sm text-gray-400">工作内容相对基础、重复和标准化，AI几秒钟内可生成样板代码、自动修复常见错误</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-100">中级工程师</td>
+                                        <td class="py-3 px-4 text-sm text-yellow-400 font-semibold">中等 (45%)</td>
+                                        <td class="py-3 px-4 text-sm text-gray-400">需要更多系统设计和架构能力，但部分编码工作可被AI辅助完成</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-100">高级工程师</td>
+                                        <td class="py-3 px-4 text-sm text-green-400 font-semibold">低 (20%)</td>
+                                        <td class="py-3 px-4 text-sm text-gray-400">工作重点在战略决策、团队领导和复杂问题解决，AI难以替代</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 转型建议部分 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-bold text-orange-500 mb-4">转型建议</h2>
+                
+                <div id="transformation-content" class="login-required">
+                    <!-- 登录后可见内容 -->
+                    <div class="login-content hidden">
+                        <p class="text-gray-600 mb-4">
+                            随着AI技术的发展，软件工程师的工作内容和技能要求正在发生变化。以下是一些可能的转型方向：
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div class="border-l-4 border-blue-500 pl-4 py-2 bg-gray-700">
+                                <h3 class="font-semibold text-gray-300">AI工程师</h3>
+                                <p class="text-sm text-gray-400">学习机器学习和深度学习技术，专注于AI模型的开发和应用</p>
+                            </div>
+                            
+                            <div class="border-l-4 border-green-500 pl-4 py-2 bg-gray-700">
+                                <h3 class="font-semibold text-gray-300">DevOps专家</h3>
+                                <p class="text-sm text-gray-400">专注于自动化部署、监控和运维，提高软件交付效率</p>
+                            </div>
+                            
+                            <div class="border-l-4 border-yellow-500 pl-4 py-2 bg-gray-700">
+                                <h3 class="font-semibold text-gray-300">产品经理</h3>
+                                <p class="text-sm text-gray-400">利用技术背景优势，转向产品设计和管理方向</p>
+                            </div>
+                            
+                            <div class="border-l-4 border-purple-500 pl-4 py-2 bg-gray-700">
+                                <h3 class="font-semibold text-gray-300">技术架构师</h3>
+                                <p class="text-sm text-gray-400">专注于系统设计和架构，解决复杂技术问题</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 未登录状态显示的模糊内容 -->
+                    <div class="blur-content">
+                        <div class="filter blur-sm">
+                        <p class="text-gray-300 mb-4">
+                            随着AI技术的发展，软件工程师的工作内容和技能要求正在发生变化。以下是一些可能的转型方向：
+                        </p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="border-l-4 border-blue-500 pl-4 py-2">
+                                    <h3 class="font-semibold text-gray-800">AI工程师</h3>
+                                    <p class="text-sm text-gray-600">学习机器学习和深度学习技术，专注于AI模型的开发和应用</p>
+                                </div>
+                                
+                                <div class="border-l-4 border-green-500 pl-4 py-2">
+                                    <h3 class="font-semibold text-gray-800">DevOps专家</h3>
+                                    <p class="text-sm text-gray-600">专注于自动化部署、监控和运维，提高软件交付效率</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <p class="text-lg font-semibold text-gray-800 mb-4">登录后查看完整内容</p>
+                                <a href="login.html?redirect=query_result.html" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">立即登录</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 相关职业推荐部分 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold text-orange-500 mb-4">相关职业推荐</h2>
+                
+                <div id="related-jobs-content" class="login-required">
+                    <!-- 登录后可见内容 -->
+                    <div class="login-content hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
+                                <h3 class="font-semibold text-gray-300 mb-2">数据科学家</h3>
+                                <p class="text-sm text-gray-400 mb-3">风险指数: <span class="text-green-400 font-semibold">低</span></p>
+                                <p class="text-sm text-gray-400">专注于数据分析和机器学习模型构建，从数据中提取有价值的见解</p>
+                            </div>
+                            
+                            <div class="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
+                                <h3 class="font-semibold text-gray-300 mb-2">云架构师</h3>
+                                <p class="text-sm text-gray-400 mb-3">风险指数: <span class="text-green-400 font-semibold">低</span></p>
+                                <p class="text-sm text-gray-400">设计和实施云计算解决方案，优化系统性能和可扩展性</p>
+                            </div>
+                            
+                            <div class="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
+                                <h3 class="font-semibold text-gray-300 mb-2">网络安全专家</h3>
+                                <p class="text-sm text-gray-400 mb-3">风险指数: <span class="text-green-400 font-semibold">低</span></p>
+                                <p class="text-sm text-gray-400">保护系统和数据免受网络攻击，设计安全架构和策略</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 未登录状态显示的模糊内容 -->
+                    <div class="blur-content">
+                        <div class="filter blur-sm">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
+                                    <h3 class="font-semibold text-gray-300 mb-2">数据科学家</h3>
+                                    <p class="text-sm text-gray-400 mb-3">风险指数: <span class="text-green-400 font-semibold">低</span></p>
+                                    <p class="text-sm text-gray-400">专注于数据分析和机器学习模型构建，从数据中提取有价值的见解</p>
+                                </div>
+                                
+                                <div class="border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow bg-gray-700">
+                                    <h3 class="font-semibold text-gray-300 mb-2">云架构师</h3>
+                                    <p class="text-sm text-gray-400 mb-3">风险指数: <span class="text-green-400 font-semibold">低</span></p>
+                                    <p class="text-sm text-gray-400">设计和实施云计算解决方案，优化系统性能和可扩展性</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <p class="text-lg font-semibold text-gray-800 mb-4">登录后查看完整内容</p>
+                                <a href="login.html?redirect=query_result.html" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">立即登录</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 结论 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold text-orange-500 mb-4">结论</h3>
+                <p class="text-gray-300">
+                    "AI时代，危机与机遇并存，唯有学习与变革并举。" 软件工程师不会因为AI而消亡，而会因为AI而进化。每一位从业者都应以积极的心态投入这场变革，打造属于自己的人机协作竞争力。也许在不远的将来，我们不再纠结于"AI会不会取代工程师"，而是庆幸于"AI让工程师变得更强"。展望未来，那些善于驾驭AI之翼的人，将在新的科技蓝天中飞得更高、更远。
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚部分 -->
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+    
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+
+    <script>
+        // 修改checkLoginStatus函数，支持自定义头像
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const userAvatar = localStorage.getItem('userAvatar');
+            const avatarBg = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+            const avatarText = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
+            const navAuthElement = document.getElementById('nav-auth');
+            
+            if (isLoggedIn && userEmail) {
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                
+                let avatarHTML = '';
+                if (userAvatar) {
+                    avatarHTML = `<img src="${userAvatar}" alt="用户头像" class="w-8 h-8 rounded-full object-cover">`;
+                } else {
+                    avatarHTML = `<div class="w-8 h-8 ${avatarBg} rounded-full flex items-center justify-center ${avatarText} font-bold">${userInitial}</div>`;
+                }
+                
+                navAuthElement.innerHTML = `
+                    <div class="relative group">
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            ${avatarHTML}
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加退出登录功能
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userAvatar');
+                    localStorage.removeItem('userAvatarColor');
+                    localStorage.removeItem('userAvatarTextColor');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                // 用户未登录，显示登录和注册按钮
+                navAuthElement.innerHTML = `
+                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                `;
+            }
+        }
+        
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            checkLoginStatus();
+            
+            // 检查用户是否已登录，显示或隐藏内容
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            // 获取所有需要登录才能查看的内容
+            const loginContents = document.querySelectorAll('.login-content');
+            const blurContents = document.querySelectorAll('.blur-content');
+            
+            if (isLoggedIn) {
+                // 用户已登录，显示完整内容
+                loginContents.forEach(content => {
+                    content.classList.remove('hidden');
+                });
+                
+                blurContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+            } else {
+                // 用户未登录，隐藏完整内容，显示模糊内容
+                loginContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                blurContents.forEach(content => {
+                    content.classList.remove('hidden');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

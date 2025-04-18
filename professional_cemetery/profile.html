@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业墓场 - 个人主页</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+
+    <!-- 加载导航栏脚本 -->
+    <script src="nav-component.js"></script>
+    
+    <!-- 导航栏容器 -->
+    <div id="nav-container"></div>
+
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- 个人信息卡片 -->
+        <div class="bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start">
+                <div class="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center text-orange-500 text-3xl font-bold mb-4 md:mb-0 md:mr-6">
+                    <span id="user-initial">U</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-2" id="user-name">用户名</h1>
+                    <p class="text-gray-400 mb-4" id="user-email">user@example.com</p>
+                    <div class="flex space-x-4">
+                        <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">编辑资料</button>
+                        <button id="logout-btn" class="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">退出登录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测评记录部分 -->
+        <div class="bg-gray-800 rounded-xl shadow-md p-6">
+            <h2 class="text-xl font-bold text-white mb-6">我的测评记录</h2>
+            
+            <div id="assessment-records" class="space-y-6">
+                <!-- 测评记录将在这里动态生成 -->
+            </div>
+            
+            <!-- 无记录时显示 -->
+            <div id="no-records" class="hidden text-center py-8">
+                <svg class="w-16 h-16 text-gray-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-gray-400 mb-4">您还没有进行过职业测评</p>
+                <a href="assessment.html" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">开始测评</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+    
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+
+    <script>
+        // 检查用户是否已登录
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const userAvatar = localStorage.getItem('userAvatar');
+            const avatarBg = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+            const avatarText = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
+            const navAuthElement = document.getElementById('nav-auth');
+            
+            if (isLoggedIn && userEmail) {
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                
+                let avatarHTML = '';
+                if (userAvatar) {
+                    avatarHTML = `<img src="${userAvatar}" alt="用户头像" class="w-8 h-8 rounded-full object-cover">`;
+                } else {
+                    avatarHTML = `<div class="w-8 h-8 ${avatarBg} rounded-full flex items-center justify-center ${avatarText} font-bold">${userInitial}</div>`;
+                }
+                
+                navAuthElement.innerHTML = `
+                    <div class="relative group">
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            ${avatarHTML}
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加退出登录功能
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userAvatar');
+                    localStorage.removeItem('userAvatarColor');
+                    localStorage.removeItem('userAvatarTextColor');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                // 用户未登录，显示登录和注册按钮
+                navAuthElement.innerHTML = `
+                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                `;
+            }
+        }
+        
+        // 页面加载时检查登录状态和加载用户数据
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            checkLoginStatus();
+            
+            // 检查用户是否已登录
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userName = localStorage.getItem('userName') || '用户';
+            const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+            
+            if (!isLoggedIn) {
+                // 用户未登录，重定向到登录页面
+                window.location.href = 'login.html?redirect=profile.html';
+                return;
+            }
+            
+            // 更新用户信息显示
+            document.getElementById('user-name').textContent = userName;
+            document.getElementById('user-email').textContent = userEmail;
+            document.getElementById('user-initial').textContent = userName.charAt(0).toUpperCase();
+            
+            // 为个人资料卡片中的退出登录按钮添加事件监听器
+            // 使用更具体的选择器，确保选择到个人资料卡片中的退出登录按钮
+            const profileLogoutBtn = document.querySelector('.bg-gray-700.text-white.px-4.py-2.rounded-lg');
+            if (profileLogoutBtn) {
+                profileLogoutBtn.addEventListener('click', function() {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userAvatar');
+                    localStorage.removeItem('userAvatarColor');
+                    localStorage.removeItem('userAvatarTextColor');
+                    window.location.href = 'index.html';
+                });
+            }
+            
+            // 获取测评记录
+            const assessmentRecords = JSON.parse(localStorage.getItem('assessmentRecords') || '[]');
+            const recordsContainer = document.getElementById('assessment-records');
+            const noRecordsElement = document.getElementById('no-records');
+            
+            if (assessmentRecords.length > 0) {
+                // 有测评记录，显示记录列表
+                noRecordsElement.classList.add('hidden');
+                
+                assessmentRecords.forEach((record, index) => {
+                    const recordElement = document.createElement('div');
+                    recordElement.className = 'border border-gray-700 bg-gray-750 rounded-lg p-4 hover:bg-gray-700 hover:shadow-md transition-shadow';
+                    
+                    let riskLevelClass = 'text-green-500';
+                    let riskLevelText = '低风险';
+                    
+                    if (record.riskLevel === 'high' || record.score >= 26) {
+                        riskLevelClass = 'text-red-500';
+                        riskLevelText = '高风险';
+                    } else if (record.riskLevel === 'medium' || record.score >= 17) {
+                        riskLevelClass = 'text-orange-500';
+                        riskLevelText = '中等风险';
+                    } else if (record.riskLevel === 'low' || record.score >= 8) {
+                        riskLevelClass = 'text-yellow-500';
+                        riskLevelText = '低风险';
+                    } else {
+                        riskLevelClass = 'text-green-500';
+                        riskLevelText = '无风险';
+                    }
+                    
+                    recordElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-semibold text-white mb-1">${record.job}</h3>
+                                <p class="text-sm text-gray-400 mb-2">测评时间: ${record.date}</p>
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-400 mr-2">风险等级:</span>
+                                    <span class="font-semibold ${riskLevelClass}">${riskLevelText}</span>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 rounded-full w-12 h-12 flex items-center justify-center">
+                                <span class="font-bold text-gray-700">${record.score}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <a href="assessment_result.html?job=${encodeURIComponent(record.job)}&total_score=${record.score}&risk_level=${record.riskLevel}" class="text-blue-500 hover:text-blue-400 text-sm font-medium">查看详情</a>
+                        </div>
+                    `;
+                    
+                    recordsContainer.appendChild(recordElement);
+                });
+            } else {
+                // 无测评记录，显示提示信息
+                noRecordsElement.classList.remove('hidden');
+            }
+        });
+
+        // 修改编辑资料按钮的功能，增加头像上传功能
+        document.querySelector('.bg-orange-500').addEventListener('click', function() {
+            // 获取当前用户信息
+            const userName = document.getElementById('user-name').textContent;
+            const userEmail = document.getElementById('user-email').textContent;
+            const userInitial = userName.charAt(0).toUpperCase();
+            
+            // 获取当前用户头像（如果有的话）
+            const userAvatar = localStorage.getItem('userAvatar');
+            const avatarColor = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+            const textColor = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
+            
+            // 创建编辑表单
+            const editForm = `
+                <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" id="edit-profile-modal">
+                    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4">编辑个人资料</h2>
+                        <form id="edit-profile-form">
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">头像</label>
+                                <div class="flex flex-col items-center">
+                                    <div class="mb-4 relative">
+                                        <div id="avatar-preview" class="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden ${userAvatar ? '' : avatarColor + ' ' + textColor}">
+                                            ${userAvatar 
+                                                ? `<img src="${userAvatar}" alt="用户头像" class="w-full h-full object-cover">` 
+                                                : `<span class="text-3xl font-bold">${userInitial}</span>`}
+                                        </div>
+                                        <button type="button" id="remove-avatar" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 ${userAvatar ? '' : 'hidden'}">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <label for="avatar-upload" class="bg-blue-100 text-blue-600 px-4 py-2 rounded-md hover:bg-blue-200 transition-colors cursor-pointer mb-2">
+                                            上传头像
+                                        </label>
+                                        <input type="file" id="avatar-upload" accept="image/*" class="hidden">
+                                        <p class="text-xs text-gray-500">支持JPG、PNG格式，最大2MB</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 ${userAvatar ? 'hidden' : ''}">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">或选择头像颜色</label>
+                                    <div class="flex flex-wrap gap-3 justify-center" id="avatar-options">
+                                        <div class="avatar-option ${avatarColor === 'bg-blue-100' && textColor === 'text-blue-600' ? 'ring-2 ring-offset-2 ring-blue-500' : ''}" data-bg="bg-blue-100" data-text="text-blue-600">
+                                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                                ${userInitial}
+                                            </div>
+                                        </div>
+                                        <div class="avatar-option ${avatarColor === 'bg-green-100' && textColor === 'text-green-600' ? 'ring-2 ring-offset-2 ring-blue-500' : ''}" data-bg="bg-green-100" data-text="text-green-600">
+                                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">
+                                                ${userInitial}
+                                            </div>
+                                        </div>
+                                        <div class="avatar-option ${avatarColor === 'bg-red-100' && textColor === 'text-red-600' ? 'ring-2 ring-offset-2 ring-blue-500' : ''}" data-bg="bg-red-100" data-text="text-red-600">
+                                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">
+                                                ${userInitial}
+                                            </div>
+                                        </div>
+                                        <div class="avatar-option ${avatarColor === 'bg-purple-100' && textColor === 'text-purple-600' ? 'ring-2 ring-offset-2 ring-blue-500' : ''}" data-bg="bg-purple-100" data-text="text-purple-600">
+                                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">
+                                                ${userInitial}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="selected-avatar-bg" value="${avatarColor}">
+                                <input type="hidden" id="selected-avatar-text" value="${textColor}">
+                                <input type="hidden" id="avatar-data" value="${userAvatar || ''}">
+                            </div>
+                            <div class="mb-4">
+                                <label for="edit-name" class="block text-gray-700 text-sm font-bold mb-2">用户名</label>
+                                <input type="text" id="edit-name" value="${userName}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="mb-4">
+                                <label for="edit-email" class="block text-gray-700 text-sm font-bold mb-2">邮箱</label>
+                                <input type="email" id="edit-email" value="${userEmail}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" readonly>
+                                <p class="text-xs text-gray-500 mt-1">邮箱地址不可修改</p>
+                            </div>
+                            <div class="flex justify-end space-x-3">
+                                <button type="button" id="cancel-edit" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">取消</button>
+                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">保存</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            // 添加表单到页面
+            document.body.insertAdjacentHTML('beforeend', editForm);
+            
+            // 添加头像选择器的样式
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+                .avatar-option {
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    border-radius: 50%;
+                }
+                .avatar-option:hover {
+                    transform: scale(1.1);
+                }
+            `;
+            document.head.appendChild(styleElement);
+            
+            // 头像上传功能
+            const avatarUpload = document.getElementById('avatar-upload');
+            const avatarPreview = document.getElementById('avatar-preview');
+            const avatarData = document.getElementById('avatar-data');
+            const removeAvatarBtn = document.getElementById('remove-avatar');
+            const avatarOptions = document.getElementById('avatar-options');
+            
+            avatarUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                
+                if (!file) return;
+                
+                // 检查文件类型
+                if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+                    alert('请上传JPG或PNG格式的图片');
+                    return;
+                }
+                
+                // 检查文件大小（最大2MB）
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('图片大小不能超过2MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // 更新预览
+                    avatarPreview.innerHTML = `<img src="${e.target.result}" alt="用户头像" class="w-full h-full object-cover">`;
+                    avatarPreview.className = 'w-24 h-24 rounded-full flex items-center justify-center overflow-hidden';
+                    
+                    // 保存图片数据
+                    avatarData.value = e.target.result;
+                    
+                    // 显示删除按钮
+                    removeAvatarBtn.classList.remove('hidden');
+                    
+                    // 隐藏颜色选择器
+                    avatarOptions.parentElement.classList.add('hidden');
+                };
+                
+                reader.readAsDataURL(file);
+            });
+            
+            // 删除头像功能
+            removeAvatarBtn.addEventListener('click', function() {
+                // 清除预览
+                avatarPreview.innerHTML = `<span class="text-3xl font-bold">${userInitial}</span>`;
+                avatarPreview.className = `w-24 h-24 rounded-full flex items-center justify-center overflow-hidden ${avatarColor} ${textColor}`;
+                
+                // 清除图片数据
+                avatarData.value = '';
+                
+                // 隐藏删除按钮
+                removeAvatarBtn.classList.add('hidden');
+                
+                // 显示颜色选择器
+                avatarOptions.parentElement.classList.remove('hidden');
+            });
+            
+            // 头像颜色选择功能
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // 移除所有选中状态
+                    document.querySelectorAll('.avatar-option').forEach(opt => {
+                        opt.classList.remove('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    });
+                    
+                    // 添加选中状态
+                    this.classList.add('ring-2', 'ring-offset-2', 'ring-blue-500');
+                    
+                    // 更新隐藏字段
+                    document.getElementById('selected-avatar-bg').value = this.dataset.bg;
+                    document.getElementById('selected-avatar-text').value = this.dataset.text;
+                    
+                    // 更新预览
+                    if (!avatarData.value) {
+                        avatarPreview.className = `w-24 h-24 rounded-full flex items-center justify-center overflow-hidden ${this.dataset.bg} ${this.dataset.text}`;
+                    }
+                });
+            });
+            
+            // 取消按钮功能
+            document.getElementById('cancel-edit').addEventListener('click', function() {
+                document.getElementById('edit-profile-modal').remove();
+                document.head.removeChild(styleElement);
+            });
+            
+            // 表单提交功能
+            document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 获取新的用户名和头像数据
+                const newUserName = document.getElementById('edit-name').value.trim();
+                const newAvatarData = document.getElementById('avatar-data').value;
+                const newAvatarBg = document.getElementById('selected-avatar-bg').value;
+                const newAvatarText = document.getElementById('selected-avatar-text').value;
+                
+                // 验证用户名不为空
+                if (!newUserName) {
+                    alert('用户名不能为空');
+                    return;
+                }
+                
+                // 更新本地存储
+                localStorage.setItem('userName', newUserName);
+                localStorage.setItem('userAvatar', newAvatarData);
+                localStorage.setItem('userAvatarColor', newAvatarBg);
+                localStorage.setItem('userAvatarTextColor', newAvatarText);
+                
+                // 更新页面显示
+                document.getElementById('user-name').textContent = newUserName;
+                
+                // 更新头像
+                const userAvatarElement = document.querySelector('.w-24.h-24');
+                if (userAvatarElement) {
+                    if (newAvatarData) {
+                        // 使用上传的图片
+                        userAvatarElement.innerHTML = `<img src="${newAvatarData}" alt="用户头像" class="w-full h-full object-cover">`;
+                        userAvatarElement.className = 'w-24 h-24 rounded-full flex items-center justify-center overflow-hidden';
+                    } else {
+                        // 使用颜色头像
+                        userAvatarElement.innerHTML = `<span id="user-initial">${newUserName.charAt(0).toUpperCase()}</span>`;
+                        userAvatarElement.className = `w-24 h-24 ${newAvatarBg} rounded-full flex items-center justify-center ${newAvatarText} text-3xl font-bold`;
+                    }
+                }
+                
+                // 关闭模态框
+                document.getElementById('edit-profile-modal').remove();
+                document.head.removeChild(styleElement);
+                
+                // 显示成功消息
+                const successMessage = `
+                    <div class="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md" id="success-message">
+                        <div class="flex">
+                            <div class="py-1">
+                                <svg class="w-6 h-6 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-bold">个人资料已更新</p>
+                                <p class="text-sm">您的个人资料已成功更新。</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', successMessage);
+                
+                // 3秒后自动移除成功消息
+                setTimeout(() => {
+                    const message = document.getElementById('success-message');
+                    if (message) message.remove();
+                }, 3000);
+                
+                // 更新导航栏中的用户名显示和头像
+                checkLoginStatus();
+            });
+        });
+
+        // 页面加载时检查是否有自定义头像
+        document.addEventListener('DOMContentLoaded', function() {
+            const userAvatar = localStorage.getItem('userAvatar');
+            const userInitial = document.getElementById('user-initial');
+            
+            if (userAvatar && userInitial) {
+                // 替换头像显示
+                const avatarElement = userInitial.parentElement;
+                avatarElement.innerHTML = `<img src="${userAvatar}" alt="用户头像" class="w-full h-full object-cover">`;
+                avatarElement.className = 'w-24 h-24 rounded-full flex items-center justify-center overflow-hidden';
+            }
+        });
+    </script>
+</body>
+</html>
