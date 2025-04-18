@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消亡职业管理 - 职业未来预测</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <header class="bg-gray-800 shadow-md">
+        <!-- 导航栏 -->
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-white flex items-center">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-blue-600">职业未来</span>
+                <span class="ml-1">预测</span>
+            </a>
+            <div class="flex space-x-6">
+                <a href="index.html" class="text-gray-300 hover:text-white transition-colors">首页</a>
+                <a href="about.html" class="text-gray-300 hover:text-white transition-colors">关于我们</a>
+                <a href="ranking.html" class="text-gray-300 hover:text-white transition-colors">职业排行</a>
+                <a href="extinct_timeline.html" class="text-gray-300 hover:text-white transition-colors">职业时间线</a>
+                <a href="#" class="text-orange-500 border-b-2 border-orange-500">管理后台</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">消亡职业数据管理</h1>
+        
+        <!-- 消亡职业表单 -->
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+            <h2 class="text-xl font-semibold mb-6 border-b border-gray-700 pb-2">添加/编辑消亡职业</h2>
+            
+            <form id="extinctJobForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="jobName" class="block text-gray-400 mb-1">职业名称</label>
+                        <input type="text" id="jobName" name="jobName" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="industry" class="block text-gray-400 mb-1">所属行业</label>
+                        <input type="text" id="industry" name="industry" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="extinctYear" class="block text-gray-400 mb-1">消亡年代</label>
+                    <input type="text" id="extinctYear" name="extinctYear" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="例如：2010年">
+                </div>
+                
+                <div>
+                    <label for="description" class="block text-gray-400 mb-1">消亡原因描述</label>
+                    <textarea id="description" name="description" rows="3" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                
+                <div>
+                    <label for="replacementTech" class="block text-gray-400 mb-1">替代技术</label>
+                    <textarea id="replacementTech" name="replacementTech" rows="2" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="多个技术用逗号分隔"></textarea>
+                </div>
+                
+                <div>
+                    <label for="historicalImpact" class="block text-gray-400 mb-1">历史影响</label>
+                    <textarea id="historicalImpact" name="historicalImpact" rows="2" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                
+                <div>
+                    <label for="colorScheme" class="block text-gray-400 mb-1">时间线颜色方案</label>
+                    <select id="colorScheme" name="colorScheme" class="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="blue">蓝色系</option>
+                        <option value="red">红色系</option>
+                        <option value="green">绿色系</option>
+                        <option value="amber">琥珀色系</option>
+                        <option value="purple">紫色系</option>
+                        <option value="teal">青色系</option>
+                    </select>
+                </div>
+                
+                <div class="flex justify-end space-x-4">
+                    <button type="reset" class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors">重置</button>
+                    <button type="submit" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-blue-600 text-white rounded hover:opacity-90 transition-opacity">保存职业数据</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 现有消亡职业列表 -->
+        <div class="mt-12 bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+            <h2 class="text-xl font-semibold mb-6 border-b border-gray-700 pb-2">现有消亡职业列表</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-gray-900 rounded-lg">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 border-b border-gray-700 text-left text-sm text-gray-400">职业名称</th>
+                            <th class="px-4 py-3 border-b border-gray-700 text-left text-sm text-gray-400">所属行业</th>
+                            <th class="px-4 py-3 border-b border-gray-700 text-left text-sm text-gray-400">消亡年代</th>
+                            <th class="px-4 py-3 border-b border-gray-700 text-right text-sm text-gray-400">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-3 text-sm">传真机操作员</td>
+                            <td class="px-4 py-3 text-sm">办公文秘</td>
+                            <td class="px-4 py-3 text-sm">2010年</td>
+                            <td class="px-4 py-3 text-right">
+                                <button class="text-blue-500 hover:text-blue-400 mr-2">编辑</button>
+                                <button class="text-red-500 hover:text-red-400">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm">电影放映员</td>
+                            <td class="px-4 py-3 text-sm">文化娱乐</td>
+                            <td class="px-4 py-3 text-sm">2015年</td>
+                            <td class="px-4 py-3 text-right">
+                                <button class="text-blue-500 hover:text-blue-400 mr-2">编辑</button>
+                                <button class="text-red-500 hover:text-red-400">删除</button>
+                            </td>
+                        </tr>
+                        <!-- 其他职业数据行 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+    
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+
+    <script>
+        // 表单提交处理
+        document.getElementById('extinctJobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // 这里添加表单数据处理逻辑，实际项目中可能会发送到后端API
+            alert('职业数据已保存！（演示用）');
+        });
+    </script>
+</body>
+</html>

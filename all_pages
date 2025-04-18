@@ -1,0 +1,309 @@
+<!-- 登录/注册模态框 -->
+<div id="auth-modal" class="modal fixed inset-0 flex items-center justify-center z-50">
+    <div class="modal-content bg-gray-900 rounded-lg shadow-xl w-full max-w-md mx-4 border border-gray-700 overflow-hidden">
+        <!-- 模态框标题栏 -->
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-700">
+            <div class="flex space-x-4">
+                <button id="login-tab-btn" class="text-orange-500 font-medium pb-2 border-b-2 border-orange-500">登录</button>
+                <button id="register-tab-btn" class="text-gray-400 font-medium pb-2 border-b-2 border-transparent">注册</button>
+            </div>
+            <button id="close-modal" class="text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- 表单容器 -->
+        <div class="tab-container">
+            <div class="flex transition-transform duration-300">
+                <!-- 登录表单 -->
+                <div id="login-form" class="form-tab w-full min-w-full px-6 py-6">
+                    <form>
+                        <div class="mb-4">
+                            <label for="login-email" class="block text-gray-400 text-sm font-medium mb-2">邮箱</label>
+                            <input type="email" id="login-email" class="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="请输入您的邮箱" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="login-password" class="block text-gray-400 text-sm font-medium mb-2">密码</label>
+                            <input type="password" id="login-password" class="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="请输入密码" required>
+                            <a href="#" class="text-sm text-orange-500 hover:text-orange-400 mt-2 inline-block">忘记密码？</a>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="remember-me" class="w-4 h-4 text-orange-500 border-gray-700 rounded focus:ring-orange-500 bg-gray-800">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-400">记住我</label>
+                        </div>
+                        <button type="button" id="login-btn" class="w-full bg-gradient-to-r from-orange-500 to-blue-600 text-white py-2 px-4 rounded-md hover:opacity-90 transition duration-300">登录</button>
+                    </form>
+                </div>
+                
+                <!-- 注册表单 -->
+                <div id="register-form" class="form-tab w-full min-w-full px-6 py-6">
+                    <form>
+                        <div class="mb-4">
+                            <label for="register-name" class="block text-gray-400 text-sm font-medium mb-2">用户名</label>
+                            <input type="text" id="register-name" class="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="请输入用户名" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="register-email" class="block text-gray-400 text-sm font-medium mb-2">邮箱</label>
+                            <input type="email" id="register-email" class="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="请输入您的邮箱" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="register-password" class="block text-gray-400 text-sm font-medium mb-2">密码</label>
+                            <input type="password" id="register-password" class="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="请输入密码" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="register-confirm-password" class="block text-gray-400 text-sm font-medium mb-2">确认密码</label>
+                            <input type="password" id="register-confirm-password" class="w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="请再次输入密码" required>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="agree-terms" class="w-4 h-4 text-orange-500 border-gray-700 rounded focus:ring-orange-500 bg-gray-800">
+                            <label for="agree-terms" class="ml-2 block text-sm text-gray-400">同意隐私协议和使用条款</label>
+                        </div>
+                        <button type="button" id="register-btn" class="w-full bg-gradient-to-r from-orange-500 to-blue-600 text-white py-2 px-4 rounded-md hover:opacity-90 transition duration-300">注册</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 社交登录部分 -->
+        <div class="px-6 py-4 bg-gray-800 border-t border-gray-700">
+            <p class="text-center text-gray-400 text-sm mb-4">或通过以下方式登录</p>
+            <div class="flex justify-center space-x-4">
+                <button class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </button>
+                <button class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.0617 11.0153C22.0617 10.2383 21.9953 9.66833 21.8523 9.07833H11.99V12.5493H17.6403C17.5283 13.3493 16.9283 14.5873 15.7233 15.4083L15.7043 15.5343L18.8083 17.8683L19.0203 17.89C21.0003 16.09 22.0617 13.7873 22.0617 11.0153Z"/>
+                        <path d="M11.99 22.0001C14.86 22.0001 17.25 21.1001 19.0207 17.8901L15.7237 15.4001C14.84 16.0001 13.64 16.4001 11.99 16.4001C9.14 16.4001 6.71265 14.5401 5.84265 11.9401L5.72165 11.9511L2.49865 14.3791L2.45465 14.4901C4.21465 18.8701 7.82065 22.0001 11.99 22.0001Z"/>
+                        <path d="M5.84 11.94C5.65 11.35 5.54 10.72 5.54 10.07C5.54 9.42 5.65 8.79 5.83 8.2L5.82 8.07L2.56 5.6L2.49 5.65C1.85 7.57 1.5 9.65 1.5 10.07C1.5 12.1 1.85 13.51 2.49 15.09L5.84 11.94Z"/>
+                        <path d="M11.99 3.74C13.76 3.74 14.96 4.51 15.68 5.17L18.62 2.32C17.24 1.03 14.86 0 11.99 0C7.82 0 4.21 3.13 2.46 7.51L5.83 10.05C6.71 7.45 9.14 3.74 11.99 3.74Z"/>
+                    </svg>
+                </button>
+                <button class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14.2871 9.15106C14.1596 7.52899 15.4521 6.58917 15.5093 6.54861C14.6668 5.30853 13.3538 5.15267 12.8797 5.13384C11.7568 5.02001 10.6736 5.82472 10.1031 5.82472C9.52122 5.82472 8.63161 5.14248 7.69632 5.16878C6.49843 5.19508 5.39057 5.84853 4.78241 6.8693C3.52887 8.93683 4.43057 12.0266 5.63237 13.6382C6.23689 14.4271 6.94322 15.3126 7.86602 15.2737C8.7624 15.2311 9.09225 14.6917 10.1941 14.6917C11.2865 14.6917 11.5926 15.2737 12.5342 15.2489C13.5038 15.2311 14.1217 14.4485 14.7072 13.6524C15.3969 12.7386 15.6793 11.844 15.6916 11.7971C15.6741 11.7887 14.4215 11.2959 14.4082 9.70047C14.3963 8.37939 15.3914 7.78258 15.4372 7.7399C14.8279 6.85232 13.9022 6.75732 13.6031 6.72731C12.5057 6.63603 11.5414 7.30421 11.0513 7.30421C10.574 7.30421 9.77109 6.78977 8.87471 6.78977H8.87472Z"/>
+                        <path d="M12.7336 4.56209C13.2046 3.97794 13.5136 3.17324 13.4303 2.3667C12.7432 2.395 11.886 2.82546 11.3936 3.39729C10.9614 3.90058 10.5878 4.7373 10.6817 5.52199C11.4475 5.57621 12.2511 5.1422 12.7336 4.56209Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 将showModal函数从局部作用域移到全局作用域
+function showModal() {
+    const modal = document.getElementById('auth-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+    document.body.style.overflow = 'hidden'; // 防止背景滚动
+}
+
+// 将hideModal函数定义到全局作用域
+function hideModal() {
+    const modal = document.getElementById('auth-modal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // 恢复背景滚动
+    }, 300);
+}
+
+// 修改checkLoginStatus函数，确保按钮的背景色正确显示
+function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userEmail = localStorage.getItem('userEmail');
+    const userName = localStorage.getItem('userName') || '用户';
+    const userAvatar = localStorage.getItem('userAvatar');
+    const avatarBg = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+    const avatarText = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
+    const navAuthElement = document.getElementById('nav-auth');
+    
+    if (isLoggedIn && userEmail) {
+        // 用户已登录，显示用户头像和下拉菜单
+        const userInitial = userName.charAt(0).toUpperCase();
+        
+        let avatarHTML = '';
+        if (userAvatar) {
+            avatarHTML = `<img src="${userAvatar}" alt="用户头像" class="w-8 h-8 rounded-full object-cover">`;
+        } else {
+            avatarHTML = `<div class="w-8 h-8 ${avatarBg} rounded-full flex items-center justify-center ${avatarText} font-bold">${userInitial}</div>`;
+        }
+        
+        navAuthElement.innerHTML = `
+            <div class="relative group">
+                <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-300 hover:text-white transition duration-300">
+                    ${avatarHTML}
+                    <span class="hidden md:inline text-sm">${userName}</span>
+                </a>
+                <div class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                    <a href="profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">个人主页</a>
+                    <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">退出登录</a>
+                </div>
+            </div>
+        `;
+        
+        // 添加退出登录功能
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userAvatar');
+            localStorage.removeItem('userAvatarColor');
+            localStorage.removeItem('userAvatarTextColor');
+            checkLoginStatus();
+        });
+    } else {
+        // 用户未登录，显示账户按钮打开模态框
+        navAuthElement.innerHTML = `
+            <button id="show-auth-modal" class="py-2 px-4 text-white rounded-md hover:opacity-90 transition duration-300 text-sm tracking-wide" style="background: linear-gradient(135deg, #E85002 0%, #3b82f6 100%);">
+                账户登录
+            </button>
+        `;
+        
+        // 确保DOM已加载完成再添加事件监听
+        setTimeout(() => {
+            const showAuthModalBtn = document.getElementById('show-auth-modal');
+            if (showAuthModalBtn) {
+                showAuthModalBtn.addEventListener('click', function() {
+                    showModal();
+                });
+            }
+        }, 100);
+    }
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+    
+    // 模态框功能
+    const modal = document.getElementById('auth-modal');
+    const closeModal = document.getElementById('close-modal');
+    const loginTabBtn = document.getElementById('login-tab-btn');
+    const registerTabBtn = document.getElementById('register-tab-btn');
+    const formContainer = document.querySelector('.tab-container .flex');
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    
+    if (closeModal) {
+        closeModal.addEventListener('click', hideModal);
+    }
+    
+    // 点击模态框背景关闭
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+    }
+    
+    // 按ESC键关闭模态框
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
+            hideModal();
+        }
+    });
+    
+    // 切换到登录表单
+    function showLoginForm() {
+        if (formContainer) {
+            formContainer.style.transform = 'translateX(0)';
+            loginTabBtn.classList.add('text-orange-500', 'border-orange-500');
+            loginTabBtn.classList.remove('text-gray-400', 'border-transparent');
+            registerTabBtn.classList.add('text-gray-400', 'border-transparent');
+            registerTabBtn.classList.remove('text-orange-500', 'border-orange-500');
+        }
+    }
+    
+    // 切换到注册表单
+    function showRegisterForm() {
+        if (formContainer) {
+            formContainer.style.transform = 'translateX(-100%)';
+            registerTabBtn.classList.add('text-orange-500', 'border-orange-500');
+            registerTabBtn.classList.remove('text-gray-400', 'border-transparent');
+            loginTabBtn.classList.add('text-gray-400', 'border-transparent');
+            loginTabBtn.classList.remove('text-orange-500', 'border-orange-500');
+        }
+    }
+    
+    // 事件监听器
+    if (loginTabBtn) loginTabBtn.addEventListener('click', showLoginForm);
+    if (registerTabBtn) registerTabBtn.addEventListener('click', showRegisterForm);
+    
+    // 登录功能
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const remember = document.getElementById('remember-me').checked;
+            
+            if (email && password) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', email.split('@')[0]);
+                
+                const colors = ['bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100', 'bg-indigo-100'];
+                const textColors = ['text-blue-600', 'text-green-600', 'text-purple-600', 'text-pink-600', 'text-indigo-600'];
+                const randomIndex = Math.floor(Math.random() * colors.length);
+                
+                localStorage.setItem('userAvatarColor', colors[randomIndex]);
+                localStorage.setItem('userAvatarTextColor', textColors[randomIndex]);
+                
+                hideModal();
+                checkLoginStatus();
+            } else {
+                alert('请输入邮箱和密码');
+            }
+        });
+    }
+    
+    // 注册功能
+    if (registerBtn) {
+        registerBtn.addEventListener('click', function() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const agreeTerms = document.getElementById('agree-terms').checked;
+            
+            if (!name || !email || !password) {
+                alert('请完成所有必填字段');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('两次输入的密码不一致');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                alert('请同意隐私协议和使用条款');
+                return;
+            }
+            
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', name);
+            
+            const colors = ['bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100', 'bg-indigo-100'];
+            const textColors = ['text-blue-600', 'text-green-600', 'text-purple-600', 'text-pink-600', 'text-indigo-600'];
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            
+            localStorage.setItem('userAvatarColor', colors[randomIndex]);
+            localStorage.setItem('userAvatarTextColor', textColors[randomIndex]);
+            
+            hideModal();
+            checkLoginStatus();
+        });
+    }
+});
+</script> 

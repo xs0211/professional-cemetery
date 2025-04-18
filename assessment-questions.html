@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>职业替代风险测评 - 问卷</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .question-card {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white px-4 py-8">
+  <form id="assessment-form" action="assessment_result.html" method="GET" class="space-y-12">
+    <!-- 隐藏字段 -->
+    <input type="hidden" name="total_score" id="total-score" value="0">
+    <input type="hidden" name="risk_level" id="risk-level" value="">
+
+    <!-- 问题循环渲染 -->
+    <div id="questions-container" class="space-y-12">
+      <!-- 用 JS 生成 12 道题目 -->
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition">提交测评</button>
+    </div>
+  </form>
+
+  <script>
+    const questions = [
+      {
+        id: 'q1',
+        title: '1. 您的核心技能或日常主要工作内容是什么？',
+        type: 'textarea',
+        placeholder: '例如：编写代码、数据分析、客户沟通等'
+      },
+      {
+        id: 'q2',
+        title: '2. 您所处岗位的人才稀缺程度如何？',
+        options: [
+          '非常稀缺：具备您这项技能的人凤毛麟角',
+          '较为稀缺：此技能需要长期训练和积累',
+          '比较常见：许多人培训后能胜任此岗位',
+          '十分常见：大量求职者拥有相关能力'
+        ]
+      },
+      {
+        id: 'q3',
+        title: '3. 您的工作任务复杂程度如何？',
+        options: [
+          '高度复杂：经常需要高级判断和创新决策',
+          '中等复杂：有部分分析和处理任务',
+          '较低复杂：主要执行规范流程',
+          '非常简单：高度重复、无需思考'
+        ]
+      },
+      {
+        id: 'q4',
+        title: '4. 您的工作对创造力或创意能力的要求如何？',
+        options: [
+          '非常需要：创意是工作核心',
+          '较多需要：时常改进流程',
+          '需求一般：偶尔有创意环节',
+          '基本不需要：按规范执行即可'
+        ]
+      },
+      {
+        id: 'q5',
+        title: '5. 您的工作流程和方法有多标准化？',
+        options: [
+          '几乎没有标准流程',
+          '部分标准化',
+          '大部分标准化',
+          '完全标准化'
+        ]
+      },
+      {
+        id: 'q6',
+        title: '6. 是否已有技术或工具可替代部分工作？',
+        options: [
+          '几乎没有替代技术',
+          '有部分辅助工具',
+          '可替代主要部分',
+          '技术可完全胜任'
+        ]
+      },
+      {
+        id: 'q7',
+        title: '7. 您的工作需要进行多少人际沟通？',
+        options: [
+          '非常多：沟通协作是核心',
+          '较多：需与同事或客户配合',
+          '较少：可独立完成大部分任务',
+          '很少：几乎无需互动'
+        ]
+      },
+      {
+        id: 'q8',
+        title: '8. 您的技能在其他行业是否具有通用性？',
+        options: [
+          '非常通用：跨行业皆可用',
+          '比较通用：适用多个相关行业',
+          '不太通用：需培训后迁移',
+          '非常专门：几乎仅适用于当前岗位'
+        ]
+      },
+      {
+        id: 'q9',
+        title: '9. 您的行业目前受技术影响的趋势如何？',
+        options: [
+          '蓬勃发展：新技术带来增长',
+          '相对稳定：技术变化较少',
+          '略有收缩：部分岗位被替代',
+          '明显萎缩：大量岗位减少'
+        ]
+      },
+      {
+        id: 'q10',
+        title: '10. 您是否持续学习以适应变化？',
+        options: [
+          '非常积极',
+          '比较积极',
+          '不太积极',
+          '基本没有'
+        ]
+      },
+      {
+        id: 'q11',
+        title: '11. 面对新工具或流程，您的应对态度？',
+        options: [
+          '积极应对',
+          '较快适应',
+          '勉强应对',
+          '抵触变化'
+        ]
+      },
+      {
+        id: 'q12',
+        title: '12. 您在组织中的岗位层级是？',
+        options: [
+          '战略决策层',
+          '管理层',
+          '专业技术层',
+          '基层执行层'
+        ]
+      }
+    ];
+
+    const container = document.getElementById('questions-container');
+
+    questions.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = 'question-card';
+
+      let inner = `<h3 class="text-xl font-semibold mb-4">${q.title}</h3>`;
+
+      if (q.type === 'textarea') {
+        inner += `<textarea name="${q.id}" rows="4" class="w-full p-3 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="${q.placeholder}" required></textarea>`;
+      } else {
+        q.options.forEach((opt, i) => {
+          inner += `
+            <div class="flex items-start space-x-3 mb-2">
+              <input type="radio" id="${q.id}-${i}" name="${q.id}" value="${i}" class="mt-1" required>
+              <label for="${q.id}-${i}" class="text-gray-300">${String.fromCharCode(65 + i)}. ${opt}</label>
+            </div>`;
+        });
+      }
+
+      div.innerHTML = inner;
+      container.appendChild(div);
+    });
+
+    document.getElementById('assessment-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let score = 0;
+      questions.forEach(q => {
+        const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+        if (selected) score += parseInt(selected.value);
+      });
+
+      let level = 'none';
+      if (score >= 26) level = 'high';
+      else if (score >= 17) level = 'medium';
+      else if (score >= 8) level = 'low';
+
+      document.getElementById('total-score').value = score;
+      document.getElementById('risk-level').value = level;
+      this.submit();
+    });
+  </script>
+</body>
+</html>

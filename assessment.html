@@ -17,738 +17,422 @@
         }
         .question-card {
             display: none;
+            margin-bottom: 2rem;
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            pointer-events: none;
         }
         .question-card.active {
             display: block;
+            opacity: 1;
+            position: relative;
+            pointer-events: auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #assessment-form {
+            position: relative;
+            min-height: 400px;
         }
         .progress-bar {
             transition: width 0.3s ease;
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-900">
+    <!-- 加载导航栏脚本 -->
+    <script src="nav-component.js"></script>
+    
+    <!-- 添加页面修复脚本 -->
+    <script src="assessment-fix.js"></script>
+    
+    <!-- 表单处理脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理基本信息表单提交
+            document.getElementById('basic-info-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 隐藏基本信息表单和标题，显示loading
+                document.getElementById('basic-info-form').classList.add('hidden');
+                document.getElementById('basic-info-form-section').querySelector('h1').classList.add('hidden');
+                document.getElementById('loading-section').classList.remove('hidden');
+                
+                // 延迟执行以显示loading效果
+                setTimeout(() => {
+                    // 隐藏loading，显示测评问卷部分
+                    document.getElementById('loading-section').classList.add('hidden');
+                    document.getElementById('assessment-section').classList.remove('hidden');
+                    document.getElementById('assessment-section').querySelector('h1').classList.remove('hidden');
+                    showQuestion(1);
+                }, 1000);
+            });
+            
+            // 卡片切换功能
+            function showQuestion(questionNumber) {
+                // 隐藏所有问题卡片
+                document.querySelectorAll('.question-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                
+                // 显示当前问题卡片
+                const currentQuestion = document.getElementById(`question-${questionNumber}`);
+                if (currentQuestion) {
+                    currentQuestion.classList.add('active');
+                    // 移除滚动到问题卡片顶部的代码，使页面保持不动
+                }
+                
+                // 更新进度条
+                const progressPercentage = (questionNumber / 5) * 100;
+                document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+            }
+            
+            // 为所有下一题按钮添加事件
+            document.querySelectorAll('.next-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const currentCard = this.closest('.question-card');
+                    const currentId = currentCard.id;
+                    const currentNum = parseInt(currentId.split('-')[1]);
+                    showQuestion(currentNum + 1);
+                });
+            });
+            
+            // 为所有上一题按钮添加事件
+            document.querySelectorAll('.prev-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const currentCard = this.closest('.question-card');
+                    const currentId = currentCard.id;
+                    const currentNum = parseInt(currentId.split('-')[1]);
+                    showQuestion(currentNum - 1);
+                });
+            });
+        });
+    </script>
 
-    <!-- 导航栏部分 -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between">
-                <div class="flex space-x-7">
-                    <a href="index.html" class="flex items-center py-4 px-2">
-                        <span class="font-semibold text-gray-700 text-lg">Professional Cemetery</span>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-1">
-                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
-                    <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
-                    <a href="assessment.html" class="py-4 px-2 text-blue-600 border-b-2 border-blue-600 font-semibold">职业测评</a>
-                    <div id="nav-auth" class="flex items-center space-x-1">
-                        <!-- 这里将由JavaScript动态填充登录/注册按钮或用户信息 -->
+    <!-- 导航栏容器 -->
+    <div id="nav-container"></div>
+    
+    <!-- 添加占位div，保持与导航栏相同的高度，确保内容不被导航栏遮挡 -->
+    <div class="h-16"></div>
+    
+    <!-- 主内容部分 -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- 模块一：基本信息填写 -->
+        <section id="basic-info-form-section">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-white mb-4">个人信息填写</h1>
+            </div>
+            <form id="basic-info-form" class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mb-8 w-full md:w-3/4 lg:w-1/2 mx-auto">
+                <div class="space-y-4 mb-4">
+                    <div>
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="age">年龄</label>
+                        <input type="number" id="age" name="age" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white mx-auto" min="18" max="100" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="gender">性别</label>
+                        <select id="gender" name="gender" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white mx-auto" required>
+                            <option value="" class="text-gray-400">请选择</option>
+                            <option value="male" class="text-white">男</option>
+                            <option value="female" class="text-white">女</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="location">所在地</label>
+                        <input type="text" id="location" name="location" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white mx-auto" placeholder="例如：北京、上海等" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="job">你的职业</label>
+                        <input type="text" id="job" name="job" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-white mx-auto" placeholder="例如：产品经理、护士、前端工程师等" required>
                     </div>
                 </div>
+                <div class="text-right">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">提交并开始测评</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 模块二：Loading页面 -->
+        <section id="loading-section" class="hidden text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-4 hidden">正在生成测评问卷</h1>
+            <p class="text-gray-400">请稍等，我们正在为您生成题目...</p>
+            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-4 mt-6"></div>
+            <p class="text-gray-400">正在生成测评题目...</p>
+        </section>
+
+        <!-- 模块三：测评问卷部分 -->
+        <section id="assessment-section" class="hidden">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-white mb-4">职业技术替代风险测评</h1>
+                <p class="text-gray-400 mt-2">本测评共5题，包括3道单选题和2道开放题。请根据实际情况作答。</p>
             </div>
-        </div>
-    </nav>
-
-    <!-- 主内容部分 -->
-    <main class="max-w-3xl mx-auto px-4 py-8">
-        <!-- 标题说明部分 -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">职业技术替代风险测评</h1>
-            <p class="text-gray-600">为了帮助您评估您的当前工作在未来受到技术进步影响而被替代或边缘化的风险，并获得相应的职业发展建议，请完成以下测评问卷。</p>
-            <p class="text-gray-600 mt-2">本测评共13题，包括11道单选题和2道开放题。请根据实际情况作答。</p>
-        </div>
-
-        <!-- 进度条 -->
-        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-8">
-            <div id="progress-bar" class="progress-bar bg-blue-600 h-2.5 rounded-full" style="width: 7%"></div>
-        </div>
 
         <!-- 测评表单 -->
-        <form id="assessment-form" action="assessment_result.html" method="GET">
+        <form id="assessment-form" action="assessment_result.html" method="GET" class="w-full mx-auto">
             <!-- 隐藏字段用于存储总分和风险等级 -->
             <input type="hidden" name="total_score" id="total-score" value="0">
             <input type="hidden" name="risk_level" id="risk-level" value="">
             
-            <!-- 问题1 -->
-            <div class="question-card active animate__animated animate__fadeIn" id="question-1">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">1. 您的当前职业或岗位是什么？</h2>
-                    <p class="text-gray-600 mb-6">请输入您目前从事的职业或岗位名称</p>
-                    <div class="mb-4">
-                        <input type="text" name="job" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例如：软件工程师、会计、教师等" onkeydown="if(event.key === 'Enter') { event.preventDefault(); document.querySelector('#question-1 .next-btn').click(); }">
-                    </div>
-                    <div class="text-right">
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
+            
 
-            <!-- 问题2 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-2">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">2. 您的核心技能或日常主要工作内容是什么？</h2>
-                    <p class="text-gray-600 mb-6">请简要描述您的主要工作内容和核心技能</p>
+            <!-- 问题1 -->
+            <div class="question-card animate__animated animate__fadeIn active" id="question-1">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
+                    <!-- 进度条 -->
+                    <div class="w-full bg-gray-700 rounded-full h-2.5 mb-6">
+                        <div id="progress-bar" class="progress-bar h-2.5 rounded-full" style="width: 7%; background: #3b82f6;"></div>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">1. 您的核心技能或日常主要工作内容是什么？</h2>
+                    <p class="text-gray-300 mb-6">请简要描述您的主要工作内容和核心技能</p>
                     <div class="mb-4">
                         <textarea name="skills" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="4" placeholder="例如：编写代码、数据分析、客户沟通等" onkeydown="if(event.key === 'Enter' && event.ctrlKey) { event.preventDefault(); document.querySelector('#question-2 .next-btn').click(); }"></textarea>
                     </div>
                     <div class="flex justify-between">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
                         <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
                     </div>
                 </div>
             </div>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
+
+            <!-- 问题2 -->
+            <div class="question-card animate__animated animate__fadeIn" id="question-2">
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">2. 您当前所从事的职业是？</h2>
+                    <p class="text-gray-300 mb-6">请填写您目前的岗位名称或工作角色</p>
+                    <div class="mb-4">
+                        <input type="text" name="job" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="例如：产品经理、护士、前端工程师等">
+                    </div>
+                    <div class="flex justify-between">
+                        <button type="button" class="prev-btn bg-gray-700 text-gray-300 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors">上一题</button>
+                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
 
             <!-- 问题3 -->
             <div class="question-card animate__animated animate__fadeIn" id="question-3">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">3. 您所处岗位的人才稀缺程度如何？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">3. 您所处岗位的人才稀缺程度如何？</h2>
+                    <p class="text-gray-300 mb-6">请选择最符合您情况的选项</p>
                     <div class="space-y-4">
-                        <div class="flex items-center">
+                            <div class="flex items-center">
                             <input type="radio" id="q3-a" name="q3" value="0" class="custom-radio hidden">
                             <label for="q3-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 非常稀缺：具备您这项技能和经验的人才凤毛麟角，行业内需求远大于供给</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">A. 非常稀缺：具备您这项技能和经验的人才凤毛麟角，行业内需求远大于供给</span>
                             </label>
-                        </div>
-                        <div class="flex items-center">
+                            </div>
+                            <div class="flex items-center">
                             <input type="radio" id="q3-b" name="q3" value="1" class="custom-radio hidden">
                             <label for="q3-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 较为稀缺：胜任此工作的专业人才不多，需要长期的训练和经验积累</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">B. 较为稀缺：胜任此工作的专业人才不多，需要长期的训练和经验积累</span>
                             </label>
-                        </div>
-                        <div class="flex items-center">
+                            </div>
+                            <div class="flex items-center">
                             <input type="radio" id="q3-c" name="q3" value="2" class="custom-radio hidden">
                             <label for="q3-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 比较常见：此岗位在业内较为常见，很多人经过培训都能胜任</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">C. 比较常见：此岗位在业内较为常见，很多人经过培训都能胜任</span>
                             </label>
-                        </div>
-                        <div class="flex items-center">
+                            </div>
+                            <div class="flex items-center">
                             <input type="radio" id="q3-d" name="q3" value="3" class="custom-radio hidden">
                             <label for="q3-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 十分常见：大量求职者拥有胜任该岗位的技能，上岗门槛低</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">D. 十分常见：大量求职者拥有胜任该岗位的技能，上岗门槛低</span>
                             </label>
                         </div>
                     </div>
                     <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
+                        <button type="button" class="prev-btn bg-gray-700 text-gray-300 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors">上一题</button>
                         <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
                     </div>
                 </div>
             </div>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
 
             <!-- 问题4 -->
             <div class="question-card animate__animated animate__fadeIn" id="question-4">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">4. 您的工作任务复杂程度如何？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">4. 您的工作任务复杂程度如何？</h2>
+                    <p class="text-gray-300 mb-6">请选择最符合您情况的选项</p>
                     <div class="space-y-4">
-                        <div class="flex items-center">
+                            <div class="flex items-center">
                             <input type="radio" id="q4-a" name="q4" value="0" class="custom-radio hidden">
                             <label for="q4-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 高度复杂：需要经常解决新问题，进行高级专业判断和决策</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">A. 高度复杂：需要经常解决新问题，进行高级专业判断和决策</span>
                             </label>
-                        </div>
-                        <div class="flex items-center">
+                            </div>
+                            <div class="flex items-center">
                             <input type="radio" id="q4-b" name="q4" value="1" class="custom-radio hidden">
                             <label for="q4-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 中等复杂：包含一定分析和问题解决，但也有部分重复性的常规任务</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">B. 中等复杂：包含一定分析和问题解决，但也有部分标准化工作</span>
                             </label>
-                        </div>
-                        <div class="flex items-center">
+                            </div>
+                            <div class="flex items-center">
                             <input type="radio" id="q4-c" name="q4" value="2" class="custom-radio hidden">
                             <label for="q4-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 较低复杂：大部分工作按既定流程执行，只有少量例外需要特别处理</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">C. 相对简单：主要执行标准化流程，偶尔需要简单判断</span>
                             </label>
-                        </div>
-                        <div class="flex items-center">
+                            </div>
+                            <div class="flex items-center">
                             <input type="radio" id="q4-d" name="q4" value="3" class="custom-radio hidden">
                             <label for="q4-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 非常简单：任务高度重复单一，几乎不需要额外思考或判断</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">D. 非常简单：完全遵循既定流程，几乎不需要判断</span>
                             </label>
-                        </div>
+                            </div>
                     </div>
                     <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
+                        <button type="button" class="prev-btn bg-gray-700 text-gray-300 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors">上一题</button>
                         <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
                     </div>
                 </div>
             </div>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
+
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
 
             <!-- 问题5 -->
             <div class="question-card animate__animated animate__fadeIn" id="question-5">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">5. 您的工作对创造力或创意能力的要求如何？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
+                <div class="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">5. 您的工作中需要多少创造性思维？</h2>
+                    <p class="text-gray-300 mb-6">请选择最符合您情况的选项</p>
                     <div class="space-y-4">
                         <div class="flex items-center">
                             <input type="radio" id="q5-a" name="q5" value="0" class="custom-radio hidden">
                             <label for="q5-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 非常需要创造力：经常需要提出新颖的想法、方案或设计，创造性是工作核心</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">A. 高度创造性：需要持续创新和原创思维</span>
                             </label>
                         </div>
                         <div class="flex items-center">
                             <input type="radio" id="q5-b" name="q5" value="1" class="custom-radio hidden">
                             <label for="q5-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 较多需要：时常需要运用创意思维改进工作，但也有固定套路可循</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">B. 中等创造性：需要定期创新但有一定模式可循</span>
                             </label>
                         </div>
                         <div class="flex items-center">
                             <input type="radio" id="q5-c" name="q5" value="2" class="custom-radio hidden">
                             <label for="q5-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 需求一般：偶尔需要一些创意发想，大多数情况下按既定方法完成任务</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">C. 少量创造性：主要遵循已有模式，偶尔需要创新</span>
                             </label>
                         </div>
                         <div class="flex items-center">
                             <input type="radio" id="q5-d" name="q5" value="3" class="custom-radio hidden">
                             <label for="q5-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 基本不需要：工作内容几乎没有发挥创意的空间，主要按指令执行</span>
+                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-500 flex-shrink-0"></span>
+                                <span class="text-gray-300">D. 几乎不需要：完全遵循既定模式和流程</span>
                             </label>
                         </div>
                     </div>
                     <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题6 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-6">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">6. 您的工作流程和方法有多标准化？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q6-a" name="q6" value="0" class="custom-radio hidden">
-                            <label for="q6-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 几乎没有标准流程：每项任务都需根据具体情况灵活处理，鲜有固定模式</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q6-b" name="q6" value="1" class="custom-radio hidden">
-                            <label for="q6-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 部分标准化：有一些指导性的流程或模板，但很多环节需要凭经验判断</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q6-c" name="q6" value="2" class="custom-radio hidden">
-                            <label for="q6-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 大部分标准化：绝大部分工作按固定流程或规范执行，只有少数情况例外</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q6-d" name="q6" value="3" class="custom-radio hidden">
-                            <label for="q6-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 完全标准化：所有工作都有明确的标准流程或操作规范可循</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题7 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-7">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">7. 目前是否已有技术或工具可以替代您工作内容的一部分？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q7-a" name="q7" value="0" class="custom-radio hidden">
-                            <label for="q7-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 几乎没有：目前还没有任何软件或设备能够有效替代我的主要工作内容</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q7-b" name="q7" value="1" class="custom-radio hidden">
-                            <label for="q7-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 有一些：已有少量工具可在有限范围内辅助或替代我的部分工作</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q7-c" name="q7" value="2" class="custom-radio hidden">
-                            <label for="q7-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 一定程度：已有技术手段能够显著提高效率，替代我相当一部分核心工作</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q7-d" name="q7" value="3" class="custom-radio hidden">
-                            <label for="q7-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 非常多：现有技术几乎可以完成我大部分重要工作，我的作用已大幅减小</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题8 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-8">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">8. 您的工作需要进行多少人际沟通或情感交流？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q8-a" name="q8" value="0" class="custom-radio hidden">
-                            <label for="q8-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 非常多：主要依靠与人的沟通协作来完成工作，经常需要处理复杂的人际互动</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q8-b" name="q8" value="1" class="custom-radio hidden">
-                            <label for="q8-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 较多：经常需要与同事或客户沟通协调，是工作的重要组成部分</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q8-c" name="q8" value="2" class="custom-radio hidden">
-                            <label for="q8-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 较少：偶尔需要配合他人，但大部分任务可以独立完成，人际互动有限</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q8-d" name="q8" value="3" class="custom-radio hidden">
-                            <label for="q8-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 很少：几乎完全独立完成工作，极少涉及与他人的沟通或情感交互</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题9 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-9">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">9. 您的技能在其他行业或岗位中是否具有通用性？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q9-a" name="q9" value="0" class="custom-radio hidden">
-                            <label for="q9-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 非常通用：这些技能各行各业几乎都需要，迁移到新领域也能胜任工作</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q9-b" name="q9" value="1" class="custom-radio hidden">
-                            <label for="q9-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 比较通用：在许多相关领域或职位上都可运用，转岗不需从头再来</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q9-c" name="q9" value="2" class="custom-radio hidden">
-                            <label for="q9-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 不太通用：技能主要适用于特定行业或岗位，换领域则需额外培训</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q9-d" name="q9" value="3" class="custom-radio hidden">
-                            <label for="q9-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 非常专门：技能高度专门化，除了当前岗位，在其他领域几乎无用武之地</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题10 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-10">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">10. 您所在的行业目前受技术进步的影响趋势如何？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q10-a" name="q10" value="0" class="custom-radio hidden">
-                            <label for="q10-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 蓬勃发展：新技术为行业带来增长动力，创造了更多新的岗位和机遇</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q10-b" name="q10" value="1" class="custom-radio hidden">
-                            <label for="q10-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 相对稳定：行业规模基本平稳，技术进步对岗位数量影响不大</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q10-c" name="q10" value="2" class="custom-radio hidden">
-                            <label for="q10-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 略有收缩：行业增速放缓，部分岗位正被自动化或其它技术逐步取代</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q10-d" name="q10" value="3" class="custom-radio hidden">
-                            <label for="q10-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 明显萎缩：行业受到技术冲击严重，传统岗位大量减少或已被淘汰</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题11 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-11">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">11. 您是否持续学习新技能以适应行业和技术的变化？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q11-a" name="q11" value="0" class="custom-radio hidden">
-                            <label for="q11-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 非常积极：经常主动学习新知识、新技能，紧跟行业技术发展步伐</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q11-b" name="q11" value="1" class="custom-radio hidden">
-                            <label for="q11-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 比较积极：会根据需要学习新的技能，但并非持续进行</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q11-c" name="q11" value="2" class="custom-radio hidden">
-                            <label for="q11-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 不太积极：除非工作要求，很少主动更新自己的技能储备</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q11-d" name="q11" value="3" class="custom-radio hidden">
-                            <label for="q11-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 基本没有：近几年几乎没有学习过新的工作技能或知识</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题12 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-12">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">12. 当工作出现新的工具、流程或行业变化时，您通常如何应对？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您情况的选项</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <input type="radio" id="q12-a" name="q12" value="0" class="custom-radio hidden">
-                            <label for="q12-a" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>A. 积极应对：乐于接受变化，迅速学习新工具新方法，并调整工作方式适应</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q12-b" name="q12" value="1" class="custom-radio hidden">
-                            <label for="q12-b" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>B. 较快适应：能够适应变化，但需要一定时间学习消化后才逐步跟上</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q12-c" name="q12" value="2" class="custom-radio hidden">
-                            <label for="q12-c" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>C. 勉强应对：不太情愿改变既有方式，通常在变化发生一段时间后才被动适应</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="q12-d" name="q12" value="3" class="custom-radio hidden">
-                            <label for="q12-d" class="flex items-center cursor-pointer">
-                                <span class="w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0"></span>
-                                <span>D. 抵触变化：抗拒新的工具或流程，更倾向坚持原有工作模式，适应非常困难</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between mt-6">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
-                        <button type="button" class="next-btn bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">下一题</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 问题13 -->
-            <div class="question-card animate__animated animate__fadeIn" id="question-13">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">13. 您在组织中的岗位层级属于以下哪一类？</h2>
-                    <p class="text-gray-600 mb-6">请选择最符合您当前情况的选项</p>
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-start">
-                            <input type="radio" name="q13" id="q13-a" value="0" class="custom-radio mt-1">
-                            <label for="q13-a" class="ml-2 text-gray-700">A. 战略决策层：负责公司或部门的战略规划和重大决策制定</label>
-                        </div>
-                        <div class="flex items-start">
-                            <input type="radio" name="q13" id="q13-b" value="1" class="custom-radio mt-1">
-                            <label for="q13-b" class="ml-2 text-gray-700">B. 管理层：负责团队管理、人员协调和决策落实等管理职责</label>
-                        </div>
-                        <div class="flex items-start">
-                            <input type="radio" name="q13" id="q13-c" value="2" class="custom-radio mt-1">
-                            <label for="q13-c" class="ml-2 text-gray-700">C. 专业技术层：作为专业人士独立承担技术或业务任务，为团队提供专业支持</label>
-                        </div>
-                        <div class="flex items-start">
-                            <input type="radio" name="q13" id="q13-d" value="3" class="custom-radio mt-1">
-                            <label for="q13-d" class="ml-2 text-gray-700">D. 基层执行层：按照上级指示完成具体任务，工作以执行为主</label>
-                        </div>
-                    </div>
-                    <div class="flex justify-between">
-                        <button type="button" class="prev-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">上一题</button>
+                        <button type="button" class="prev-btn bg-gray-700 text-gray-300 px-6 py-2 rounded-md hover:bg-gray-600 transition-colors">上一题</button>
                         <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">提交测评</button>
                     </div>
                 </div>
             </div>
         </form>
     </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
 
-    <!-- 页脚部分 -->
-    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
-            <p>© 2023 AI职业墓场. 保留所有权利.</p>
-        </div>
-    </footer>
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+</body>
+</html>
+        </form>
+    </main>
+    
+    <!-- 在页面底部添加页脚容器 -->
+    <div id="footer-container"></div>
 
-    <script>
-        // 检查用户是否已登录
-        function checkLoginStatus() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const userEmail = localStorage.getItem('userEmail');
-            const userName = localStorage.getItem('userName') || '用户';
-            const navAuthElement = document.getElementById('nav-auth');
-            
-            if (isLoggedIn && userEmail) {
-                // 用户已登录，显示用户头像和下拉菜单
-                const userInitial = userName.charAt(0).toUpperCase();
-                navAuthElement.innerHTML = `
-                    <div class="relative group">
-                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
-                                ${userInitial}
-                            </div>
-                            <span class="hidden md:inline">${userName}</span>
-                        </a>
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
-                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
-                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
-                        </div>
-                    </div>
-                `;
-                
-                // 添加退出登录功能
-                document.getElementById('logout-btn').addEventListener('click', function(e) {
-                    e.preventDefault();
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userName');
-                    window.location.reload();
-                });
-            } else {
-                // 用户未登录，显示登录和注册按钮
-                navAuthElement.innerHTML = `
-                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
-                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
-                `;
-            }
-        }
-        
-        // 页面加载时检查登录状态和初始化表单
-        document.addEventListener('DOMContentLoaded', function() {
-            // 检查登录状态
-            checkLoginStatus();
-            
-            const questionCards = document.querySelectorAll('.question-card');
-            const nextButtons = document.querySelectorAll('.next-btn');
-            const prevButtons = document.querySelectorAll('.prev-btn');
-            const progressBar = document.getElementById('progress-bar');
-            const totalQuestions = questionCards.length;
-            const form = document.getElementById('assessment-form');
-            
-            let currentQuestion = 1;
-            
-            // 设置单选按钮样式
-            const radioButtons = document.querySelectorAll('.custom-radio');
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    // 找到同一组中的所有单选按钮
-                    const name = this.getAttribute('name');
-                    const group = document.querySelectorAll(`input[name="${name}"]`);
-                    
-                    // 重置所有标签样式
-                    group.forEach(btn => {
-                        const label = document.querySelector(`label[for="${btn.id}"]`);
-                        const span = label.querySelector('span:first-child');
-                        span.className = 'w-5 h-5 inline-block mr-2 rounded-full border border-gray-400 flex-shrink-0';
-                    });
-                    
-                    // 设置选中项的样式
-                    const label = document.querySelector(`label[for="${this.id}"]`);
-                    const span = label.querySelector('span:first-child');
-                    span.className = 'w-5 h-5 inline-block mr-2 rounded-full border-4 border-blue-500 flex-shrink-0';
-                });
-            });
-            
-            // 下一题按钮点击事件
-            nextButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // 检查当前问题是否已回答
-                    const currentCard = document.getElementById(`question-${currentQuestion}`);
-                    
-                    // 对于单选题，检查是否已选择
-                    if (currentQuestion > 2) {
-                        const radioGroup = currentCard.querySelectorAll(`input[name="q${currentQuestion}"]`);
-                        let answered = false;
-                        radioGroup.forEach(radio => {
-                            if (radio.checked) answered = true;
-                        });
-                        
-                        if (!answered) {
-                            alert('请回答当前问题后再继续');
-                            return;
-                        }
-                    } else {
-                        // 对于开放题，检查是否已填写
-                        const input = currentQuestion === 1 ? 
-                            currentCard.querySelector('input[name="job"]') : 
-                            currentCard.querySelector('textarea[name="skills"]');
-                        
-                        if (!input.value.trim()) {
-                            alert('请填写当前问题后再继续');
-                            return;
-                        }
-                    }
-                    
-                    // 隐藏当前问题，显示下一问题
-                    currentCard.classList.remove('active');
-                    currentQuestion++;
-                    document.getElementById(`question-${currentQuestion}`).classList.add('active');
-                    
-                    // 更新进度条
-                    updateProgressBar();
-                });
-            });
-            
-            // 上一题按钮点击事件
-            prevButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // 隐藏当前问题，显示上一问题
-                    document.getElementById(`question-${currentQuestion}`).classList.remove('active');
-                    currentQuestion--;
-                    document.getElementById(`question-${currentQuestion}`).classList.add('active');
-                    
-                    // 更新进度条
-                    updateProgressBar();
-                });
-            });
-            
-            // 更新进度条
-            function updateProgressBar() {
-                const progress = (currentQuestion / totalQuestions) * 100;
-                progressBar.style.width = `${progress}%`;
-            }
-            
-            // 表单提交前检查用户是否已登录
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // 检查用户是否已登录
-                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                
-                if (!isLoggedIn) {
-                    // 用户未登录，跳转到登录页面
-                    window.location.href = 'login.html?redirect=assessment.html';
-                    return;
-                }
-                
-                // 计算总分
-                let totalScore = 0;
-                for (let i = 3; i <= 13; i++) {
-                    const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
-                    if (selectedOption) {
-                        totalScore += parseInt(selectedOption.value);
-                    }
-                }
-                
-                // 设置风险等级
-                let riskLevel = '';
-                if (totalScore >= 26) {
-                    riskLevel = 'high';
-                } else if (totalScore >= 17) {
-                    riskLevel = 'medium';
-                } else if (totalScore >= 8) {
-                    riskLevel = 'low';
-                } else {
-                    riskLevel = 'none';
-                }
-                
-                // 更新隐藏字段
-                document.getElementById('total-score').value = totalScore;
-                document.getElementById('risk-level').value = riskLevel;
-                
-                // 添加一个参数表示这是一个新的测评
-                const jobInput = document.querySelector('input[name="job"]');
-                const job = encodeURIComponent(jobInput.value);
-                
-                // 提交表单到assessment_result.html
-                window.location.href = `assessment_result.html?job=${job}&total_score=${totalScore}&risk_level=${riskLevel}&new=true`;
-            });
-            
-            // 防止回车键提交表单
-            form.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-        });
-    </script>
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
 </body>
 </html>

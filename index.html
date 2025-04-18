@@ -6,488 +6,1232 @@
     <title>职业墓场 - 首页</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<script src="nav-component.js" defer></script>
+<script src="ranking-row-expand.js" defer></script>
+<script src="https://cdn.tailwindcss.com"></script>
     <style>
         .job-details {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease;
+            opacity: 0;
         }
         .job-item.active .job-details {
             max-height: 200px;
-            transition: max-height 0.5s ease-in;
+            transition: max-height 0.5s ease-in, opacity 0.5s ease;
+            opacity: 1;
+        }
+        .main-gradient {
+            background: linear-gradient(135deg, #E85002 0%, #8B5CF6 100%);
+        }
+        .text-main {
+            color: #E85002;
+        }
+        .bg-main {
+            background-color: #E85002;
+        }
+        .border-main {
+            border-color: #E85002;
+        }
+        .glow-element {
+            box-shadow: 0 0 15px rgba(232, 80, 2, 0.4);
+        }
+        
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 50;
+            overflow: auto;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content {
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .form-tab {
+            transform: translateX(0);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .tab-container {
+            overflow: hidden;
+        }
+        
+        /* 排行榜外发光效果 */
+        .glow-red {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .glow-red:hover {
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+            transform: translateY(-3px);
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 20px rgba(22, 163, 74, 0.3);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+        .glow-green:hover {
+            box-shadow: 0 0 30px rgba(22, 163, 74, 0.5);
+            transform: translateY(-3px);
+        }
+        
+        .glow-gray {
+            box-shadow: 0 0 15px rgba(75, 85, 99, 0.3);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            filter: grayscale(0.5);
+        }
+        .glow-gray:hover {
+            box-shadow: 0 0 20px rgba(75, 85, 99, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+        .glow-purple:hover {
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
+        }
+        
+        /* 排行榜悬停和点击效果 */
+        .job-row {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+        
+        .job-row:hover {
+            background-color: rgba(55, 65, 81, 0.5);
+            border-left-color: #E85002;
+            transform: translateX(2px);
+        }
+        
+        .job-row.low-risk:hover {
+            border-left-color: #10B981;
+        }
+        
+        .job-row.extinct:hover {
+            border-left-color: #6B7280;
+        }
+        
+        /* 重要修改：将job-details与job-row相关联 */
+        .job-item .job-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease;
+            opacity: 0;
+            background-color: rgba(31, 41, 55, 0.5);
+            border-radius: 0.25rem;
+        }
+        
+        .job-item.active .job-details {
+            max-height: 300px;
+            opacity: 1;
+            transition: max-height 0.5s ease-in, opacity 0.5s ease;
+        }
+        
+        /* 减小行距 */
+        .space-y-4 {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+        }
+        
+        .space-y-3 {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+        }
+
+        .extinct-timeline .timeline-item {
+            transition: all 0.3s ease;
+        }
+        
+        .extinct-timeline .timeline-item:hover {
+            transform: translateY(-5px);
+            /* 移除box-shadow效果 */
+        }
+        
+        .glow-red {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+        
+        .glow-green {
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+        }
+        
+        .glow-gray {
+            box-shadow: 0 0 15px rgba(156, 163, 175, 0.2);
+        }
+        
+
+        
+        /* 功能模块流动背景动画 - 水波纹效果 */
+        @keyframes flowBackground {
+            0% { transform: translate(0, 0) skew(0deg, 0deg); opacity: 0.8; filter: blur(8px); }
+            20% { transform: translate(-30px, 20px) skew(2deg, 1deg); opacity: 0.9; filter: blur(7px); }
+            40% { transform: translate(25px, 30px) skew(-1deg, 2deg); opacity: 1; filter: blur(6px); }
+            60% { transform: translate(30px, -15px) skew(-2deg, 0deg); opacity: 0.9; filter: blur(7px); }
+            80% { transform: translate(-25px, -20px) skew(1deg, -1deg); opacity: 0.8; filter: blur(8px); }
+            100% { transform: translate(0, 0) skew(0deg, 0deg); opacity: 0.8; filter: blur(8px); }
+        }
+        
+        @keyframes pulseGlow {
+            0% { opacity: 0.6; transform: scale(1.0); }
+            50% { opacity: 1; transform: scale(1.25); }
+            100% { opacity: 0.6; transform: scale(1.0); }
+        }
+        
+        /* 水波纹动画效果 */
+        @keyframes waterWave {
+            0% { transform: translate(0, 0) scale(1.05); opacity: 0.7; }
+            25% { transform: translate(-15px, 25px) scale(1.08); opacity: 0.8; }
+            50% { transform: translate(15px, 35px) scale(1.03); opacity: 0.9; }
+            75% { transform: translate(25px, 10px) scale(1.06); opacity: 0.8; }
+            100% { transform: translate(0, 0) scale(1.05); opacity: 0.7; }
+        }
+        
+        /* 搜索框渐变边框效果 */
+        .search-box {
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            z-index: 1;
+            background-color: rgba(31, 41, 55, 0.9);
+        }
+        
+        .search-box::before {
+            content: '';
+            position: absolute;
+            top: -2px; right: -2px; bottom: -2px; left: -2px;
+            z-index: -1;
+            border-radius: 0.5rem;
+            background: linear-gradient(135deg, #E85002 0%, #8B5CF6 100%);
+            margin: 0;
+            padding: 0;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .search-box:hover::before {
+            opacity: 1;
+        }
+        
+        /* 热门搜索标签磨砂效果 */
+        .search-tag {
+            background-color: rgba(31, 41, 55, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-tag:hover {
+            background-color: rgba(55, 65, 81, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(232, 80, 2, 0.2);
         }
     </style>
+    
+    <!-- 呼吸动画背景 -->
+    <style>
+        @keyframes breathe {
+          0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.7;
+          }
+          50% {
+            transform: translate(-50%, -50%) scale(1.6);
+            opacity: 1;
+          }
+        }
+      
+        body::before {
+          content: '';
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          width: 100vmax;
+          height: 100vmax;
+          background: radial-gradient(circle at center, rgba(232, 80, 2, 0.4), rgba(232, 80, 2, 0) 70%);
+          animation: breathe 4s ease-in-out infinite;
+          z-index: -1;
+          pointer-events: none;
+        }
+      </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-900 text-white">
+    <!-- 导航栏将通过JavaScript动态加载 -->
+    <div id="nav-container"></div>
 
-    <!-- 导航栏部分 -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between">
-                <div class="flex space-x-7">
-                    <a href="#" class="flex items-center py-4 px-2">
-                        <span class="font-semibold text-gray-700 text-lg">Professional Cemetery</span>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-1">
-                    <a href="home.html" class="py-4 px-2 text-blue-600 border-b-2 border-blue-600 font-semibold">首页</a>
-                    <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
-                    <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
-                    <div id="nav-auth" class="flex items-center space-x-1">
-                        <!-- 这里将由JavaScript动态填充登录/注册按钮或用户信息 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- 主要内容部分 -->
 
     <!-- 主内容部分 -->
     <main class="max-w-6xl mx-auto px-4 py-8">
     <!-- 标语部分 -->
-        <div class="text-center animate__animated animate__fadeInDown">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">我的工作会被AI取代吗</h1>
-            <p class="text-gray-600 mb-8">基于人工智能技术，为您提供未来职业发展趋势分析</p>
+        <div class="text-center animate__animated animate__fadeInDown py-32">
+            <h1 class="text-7xl font-bold mb-6" style="background: linear-gradient(135deg, #E85002 0%, #3b82f6 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; letter-spacing: -1px;">我的工作会被AI取代吗？</h1>
+            <p class="text-gray-400 text-2xl mb-12">基于人工智能技术，为您提供未来职业发展趋势分析</p>
         </div>
 
     <!-- 搜索表单部分 -->
-        <div class="max-w-md mx-auto mb-4">
-            <form action="query_result.html" method="GET">
-                <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-                    <input type="text" name="q" class="flex-1 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="输入职业名称...">
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 hover:bg-blue-700 transition-colors">搜索</button>
-                </div>
-                </form>
-        </div>
+    <div class="relative mt-4 mx-auto w-[60%]">
+        <form action="query_result.html" method="GET">
+          <!-- 渐变边框外壳 -->
+          <div class="p-[1px] rounded-lg bg-gradient-to-r from-[#E85002] to-[#3b82f6]">
+            <!-- 实际的 input 容器，背景色设为和整体一致 -->
+            <div class="bg-[#111827] rounded-lg">
+              <input
+                type="text"
+                name="q"
+                placeholder="请输入你的职业，如‘程序员’"
+                class="w-full px-6 py-4 pr-24 rounded-lg bg-transparent text-white border-none focus:outline-none"
+              />
+            </div>
+          </div>
+      
+          <!-- 搜索按钮，定位在右边 -->
+          <button
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg">
+            搜索
+          </button>
+        </form>
+      </div>
+      
+                
         
         <!-- 热门搜索职业 -->
-        <div class="max-w-md mx-auto mb-16 text-center">
-            <p class="text-sm text-gray-500 mb-2">热门搜索：</p>
-            <div class="flex flex-wrap justify-center gap-2">
-                <a href="query_result.html?q=软件工程师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">软件工程师</a>
-                <a href="query_result.html?q=教师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">教师</a>
-                <a href="query_result.html?q=会计" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">会计</a>
-                <a href="query_result.html?q=医生" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">医生</a>
-                <a href="query_result.html?q=律师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">律师</a>
-                <a href="query_result.html?q=设计师" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors">设计师</a>
-            </div>
-            </div>
-            
-        <!-- 职业排行榜部分 -->
-        <div class="space-y-8">
-            <!-- 高风险职业排行 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="bg-red-600 text-white px-4 py-3">
-                    <h2 class="text-xl font-bold">高风险职业排行</h2>
-                </div>
-                <table class="w-full">
-                    <thead class="bg-gray-50 border-b">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600 w-16">排行</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">职业名称</th>
-                            <th class="px-4 py-2 text-right text-sm font-semibold text-gray-600 w-24">风险指数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">1</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">数据录入员</td>
-                            <td class="px-4 py-3 text-right text-red-600 font-semibold">95%</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                随着OCR技术和自动化数据处理的发展，数据录入工作正在被快速取代。AI可以更快速、更准确地完成数据录入任务。
-                            </td>
-                        </tr>
-                        
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">2</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">收银员</td>
-                            <td class="px-4 py-3 text-right text-red-600 font-semibold">92%</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                自助结账系统和移动支付技术的普及使得传统收银员岗位需求大幅下降，预计未来5年内将减少70%的岗位。
-                            </td>
-                        </tr>
-                        
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">3</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">电话销售员</td>
-                            <td class="px-4 py-3 text-right text-red-600 font-semibold">89%</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                AI语音助手和自动化营销系统正在取代传统电话销售，智能系统可以同时处理成千上万的客户，且不会感到疲劳。
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="px-4 py-3 bg-gray-50 text-right">
-                    <a href="ranking.html" class="text-red-600 hover:text-red-800 font-medium">查看更多 →</a>
-        </div>
-            </div>
-            
-            <!-- 低风险职业排行 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="bg-green-600 text-white px-4 py-3">
-                    <h2 class="text-xl font-bold">低风险职业排行</h2>
-                </div>
-                <table class="w-full">
-                    <thead class="bg-gray-50 border-b">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600 w-16">排行</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">职业名称</th>
-                            <th class="px-4 py-2 text-right text-sm font-semibold text-gray-600 w-24">安全指数</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">1</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">数据科学家</td>
-                            <td class="px-4 py-3 text-right text-green-600 font-semibold">96%</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                随着大数据时代的到来，对数据分析和解释的需求激增。数据科学家需要创造性思维和专业判断，这是AI难以替代的。
-                            </td>
-                        </tr>
-                        
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">2</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">人工智能工程师</td>
-                            <td class="px-4 py-3 text-right text-green-600 font-semibold">95%</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                开发和维护AI系统的专业人才需求持续增长，这一领域需要高度专业化的知识和创新能力，短期内不会被自动化取代。
-                            </td>
-                        </tr>
-                        
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">3</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">医疗保健专家</td>
-                            <td class="px-4 py-3 text-right text-green-600 font-semibold">93%</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                医疗行业需要人性化关怀和复杂决策，虽然AI可以辅助诊断，但医生的专业判断和患者互动仍然不可替代。
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="px-4 py-3 bg-gray-50 text-right">
-                    <a href="ranking.html" class="text-green-600 hover:text-green-800 font-medium">查看更多 →</a>
-        </div>
-            </div>
-            
-            <!-- 已消亡职业排行 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="bg-gray-700 text-white px-4 py-3">
-                    <h2 class="text-xl font-bold">已消亡职业排行</h2>
-                </div>
-                <table class="w-full">
-                    <thead class="bg-gray-50 border-b">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600 w-16">排行</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600">职业名称</th>
-                            <th class="px-4 py-2 text-right text-sm font-semibold text-gray-600 w-24">消亡年代</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">1</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">传真机操作员</td>
-                            <td class="px-4 py-3 text-right text-gray-600 font-semibold">2010年</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                电子邮件和即时通讯工具的普及使得传真机及相关操作岗位几乎完全消失，现代办公环境中已很少见到传真机。
-                            </td>
-                        </tr>
-                        
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">2</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">电影放映员</td>
-                            <td class="px-4 py-3 text-right text-gray-600 font-semibold">2015年</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                数字放映技术的普及使得传统胶片放映员几乎完全消失，现代影院使用自动化数字放映系统，无需专人操作。
-                            </td>
-                        </tr>
-                        
-                        <tr class="job-item border-b cursor-pointer hover:bg-gray-50" onclick="toggleJobDetails(this)">
-                            <td class="px-4 py-3 text-gray-800">3</td>
-                            <td class="px-4 py-3 font-medium text-gray-800">打字员</td>
-                            <td class="px-4 py-3 text-right text-gray-600 font-semibold">2000年</td>
-                        </tr>
-                        <tr class="hidden job-details bg-gray-50">
-                            <td colspan="3" class="px-6 py-3 text-gray-600 text-sm">
-                                个人电脑的普及使得专业打字员岗位消失，现代办公环境中每个人都需要具备基本的打字能力。
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="px-4 py-3 bg-gray-50 text-right">
-                    <a href="extinct_jobs.html" class="text-gray-600 hover:text-gray-800 font-medium">查看更多 →</a>
-                </div>
+        <div class="max-w-lg mx-auto mb-16 text-center">
+            <p class="text-base text-gray-400 mb-4 mt-12">热门搜索：</p>
+            <div class="flex flex-nowrap gap-2 justify-start mt-6 overflow-x-auto hide-scrollbar">
+                <a href="query_result.html?q=软件工程师" class="px-4 py-2 text-white rounded-full text-base hover:bg-gray-700 transition-colors hover:shadow-lg search-tag">软件工程师</a>
+                <a href="query_result.html?q=教师" class="px-4 py-2 text-white rounded-full text-base hover:bg-gray-700 transition-colors hover:shadow-lg search-tag">教师</a>
+                <a href="query_result.html?q=会计" class="px-4 py-2 text-white rounded-full text-base hover:bg-gray-700 transition-colors hover:shadow-lg search-tag">会计</a>
+                <a href="query_result.html?q=医生" class="px-4 py-2 text-white rounded-full text-base hover:bg-gray-700 transition-colors hover:shadow-lg search-tag">医生</a>
+                <a href="query_result.html?q=律师" class="px-4 py-2 text-white rounded-full text-base hover:bg-gray-700 transition-colors hover:shadow-lg search-tag">律师</a>
+                <a href="query_result.html?q=设计师" class="px-4 py-2 text-white rounded-full text-base hover:bg-gray-700 transition-colors hover:shadow-lg search-tag">设计师</a>
             </div>
         </div>
+        
+        <!-- 页面主要内容区域 -->
+        <div class="container mx-auto px-4 py-8">
+            <!-- 职业消亡时间线模块（调整配色） -->
+            <div class="extinct-timeline relative mb-12">
+                <h2 class="text-2xl font-bold text-white mb-8 text-center">谁会是下一个？</h2>
+                
+                <!-- 第一行：占据位置1-2-3，图片在右侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #1E293B; height: 300px; border-left: 3px solid #F97316;">
+                        <div class="ml-auto mr-0 max-w-md text-right">
+                            <h3 class="text-orange-400 font-bold text-xl mb-2">»电影放映员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">文化娱乐</p>
+                            <p class="text-gray-300 mt-4">数字放映技术的普及使传统放映师几乎完全消失。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>数字投影系统、自动化放映设备、流媒体平台</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>曾是胶片电影时代关键职业，数字化后99%岗位消失</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(30, 41, 59, 0.7);">
+                                <span class="text-orange-400 text-6xl font-bold">2015</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                </div>
+                
+                <!-- 第二行：占据位置2-3-4，图片在右侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #111827; height: 300px; border-left: 3px solid #3B82F6;">
+                        <div class="ml-auto mr-0 max-w-md text-right">
+                            <h3 class="text-blue-400 font-bold text-xl mb-2">»传真机操作员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">办公文秘</p>
+                            <p class="text-gray-300 mt-4">电子邮件和即时通讯工具的普及使传真机操作岗位消失。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>电子邮件、即时通讯、数字文档、云存储</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>曾是20世纪80-90年代办公室通讯核心，90%以上业务已转为数字化</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1558458878-36802fc9f039?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(17, 24, 39, 0.7);">
+                                <span class="text-blue-400 text-6xl font-bold">2010</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第三行：占据位置1-2-3，图片在右侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #1E293B; height: 300px; border-left: 3px solid #F97316;">
+                        <div class="ml-auto mr-0 max-w-md text-right">
+                            <h3 class="text-orange-400 font-bold text-xl mb-2">»电话接线员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">通信服务</p>
+                            <p class="text-gray-300 mt-4">自动电话交换系统和手机普及使手动接线员职业消失。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>自动交换机、移动通信、网络电话</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>曾是电话通信的核心环节，现已完全自动化</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1516726817505-f5ed825624d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(30, 41, 59, 0.7);">
+                                <span class="text-orange-400 text-6xl font-bold">2005</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                </div>
+                
+                <!-- 第四行：占据位置2-3-4，图片在左侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1601752943749-7dd8d89f407a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(17, 24, 39, 0.7);">
+                                <span class="text-blue-400 text-6xl font-bold">2000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #111827; height: 300px; border-right: 3px solid #3B82F6;">
+                        <div class="ml-0 mr-auto max-w-md text-left">
+                            <h3 class="text-blue-400 font-bold text-xl mb-2">»打字员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">办公文秘</p>
+                            <p class="text-gray-300 mt-4">个人电脑普及使专业打字员岗位消失，现代办公人员均需掌握打字技能。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>个人电脑、文字处理软件、语音识别</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>打字曾是专业技能，现已成为基本办公技能</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第五行：占据位置1-2-3，图片在左侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1531259736756-6caccf485f81?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(30, 41, 59, 0.7);">
+                                <span class="text-orange-400 text-6xl font-bold">1990</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #1E293B; height: 300px; border-right: 3px solid #F97316;">
+                        <div class="ml-0 mr-auto max-w-md text-left">
+                            <h3 class="text-orange-400 font-bold text-xl mb-2">»灯塔守护员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">航海安全</p>
+                            <p class="text-gray-300 mt-4">现代导航系统和自动化灯塔技术使得人工守护灯塔的职业几乎消失。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>GPS导航、自动灯塔系统、无线通信</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>曾是海上航行安全的关键保障，现已自动化</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                </div>
+                
+                <!-- 第六行：占据位置2-3-4，图片在左侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1498940757830-82f7813bf178?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(17, 24, 39, 0.7);">
+                                <span class="text-blue-400 text-6xl font-bold">1995</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #111827; height: 300px; border-right: 3px solid #3B82F6;">
+                        <div class="ml-0 mr-auto max-w-md text-left">
+                            <h3 class="text-blue-400 font-bold text-xl mb-2">»电报员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">通信服务</p>
+                            <p class="text-gray-300 mt-4">负责使用摩尔斯电码发送和接收电报信息，随着电话和互联网普及而消亡。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>电话、电子邮件、即时通讯软件</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>曾是全球信息传递的骨干网络，现已基本退出历史舞台</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第七行：占据位置1-2-3，图片在右侧 -->
+                <div class="grid grid-cols-4 mb-0">
+                    <div class="col-span-2 p-6 flex flex-col justify-center" style="background-color: #1E293B; height: 300px; border-left: 3px solid #F97316;">
+                        <div class="ml-auto mr-0 max-w-md text-right">
+                            <h3 class="text-orange-400 font-bold text-xl mb-2">»冰块配送员«</h3>
+                            <p class="text-gray-400 text-sm mb-1">家居服务</p>
+                            <p class="text-gray-300 mt-4">在电冰箱普及前，冰块配送是保持食物新鲜的重要服务。</p>
+                            <div class="mt-3">
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">替代技术：</span>家用冰箱、冷藏技术、制冷设备</p>
+                                <p class="text-gray-400 text-sm"><span class="font-medium text-gray-300">历史影响：</span>曾是城市重要民生服务，现已被现代制冷设备完全取代</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 aspect-square flex items-center justify-center overflow-hidden" style="height: 300px;">
+                        <div class="w-full h-full bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1560963689-b5682b6440f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80');">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: rgba(30, 41, 59, 0.7);">
+                                <span class="text-orange-400 text-6xl font-bold">1950</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1"></div> <!-- 空白区域 -->
+                </div>
 
-        <!-- 功能介绍部分 -->
-        <div class="py-16 bg-white">
-            <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">我们的核心功能</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <!-- 功能1 -->
-                    <div class="flex flex-col items-center text-center">
-                        <div class="bg-blue-100 rounded-full p-5 mb-6">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">职业风险评估</h3>
-                        <p class="text-gray-600">基于最新AI研究和行业数据，分析您的职业被人工智能取代的风险程度，提供详细的风险指数和趋势预测。</p>
-                    </div>
-                    
-                    <!-- 功能2 -->
-                    <div class="flex flex-col items-center text-center">
-                        <div class="bg-green-100 rounded-full p-5 mb-6">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">职业排行榜</h3>
-                        <p class="text-gray-600">查看不同行业和职业的AI替代风险排名，了解哪些职业最安全，哪些面临最大挑战，助您做出明智的职业规划。</p>
-                    </div>
-                    
-                    <!-- 功能3 -->
-                    <div class="flex flex-col items-center text-center">
-                        <div class="bg-purple-100 rounded-full p-5 mb-6">
-                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">个性化职业测评</h3>
-                        <p class="text-gray-600">通过回答一系列问题，获取个性化的职业建议，找到适合自己且具有未来发展潜力的职业方向。</p>
-                    </div>
-                </div>
-                
-                <!-- 功能模块按钮 -->
-                <div class="mt-16 text-center">
-                    <a href="assessment.html" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
-                        开始职业测评 →
+                <!-- 查看更多按钮 -->
+                <div class="text-center mt-8">
+                    <a href="extinct_timeline.html" class="inline-block px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        查看更多消亡职业 →
                     </a>
                 </div>
             </div>
+
+            <h2 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#E85002] to-[#3b82f6] mb-10 mt-24">职业风险排行</h2>
+            
+            <!-- 排行榜并列布局 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 高风险职业排行 -->
+                <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 glow-red">
+                    <div class="px-4 py-4 border-b border-gray-700 flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-white">高风险职业排行</h2>
+                        <a href="ranking.html" class="text-gray-500 hover:text-gray-400 text-sm">查看更多 →</a>
+                    </div>
+                    <div class="p-4 text-white">
+                        <div class="grid grid-cols-12 gap-2 text-sm text-gray-400 mb-2 px-2 py-3 bg-gray-700 rounded">
+                            <div class="col-span-1 text-left">序号</div>
+                            <div class="col-span-5 text-left">职业名称</div>
+                            <div class="col-span-3 text-left">所属行业</div>
+                            <div class="col-span-3 text-right">风险指数</div>
+                        </div>
+                        <ul class="space-y-1 mt-3">
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">01</span>
+                                    <span class="col-span-5">数据录入员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">数据服务</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">95%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">自动化数据处理技术快速发展，绝大部分数据录入工作已被AI和自动化工具取代。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：光学字符识别 (OCR)、语音转文本、自动表单处理、机器学习</p>
+                                        <p>建议转型方向：数据分析、业务分析、AI训练数据标注</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">02</span>
+                                    <span class="col-span-5">收银员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">零售业</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">92%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">自助结账和移动支付普及，无人零售技术发展迅速。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：自助结账系统、移动支付、RFID识别技术、计算机视觉</p>
+                                        <p>建议转型方向：客户体验顾问、零售店铺运营、数字化门店管理</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">03</span>
+                                    <span class="col-span-5">电话销售员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">销售服务</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">89%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">AI语音助手和自动化营销系统能够处理大部分销售流程。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：自动呼叫系统、AI语音助手、大语言模型 (LLM)、CRM自动化</p>
+                                        <p>建议转型方向：销售策略制定、客户关系管理、高端咨询顾问</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- 新增的高风险职业 -->
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">04</span>
+                                    <span class="col-span-5">银行柜员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">金融服务</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">87%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">移动银行和自助服务的普及，数字支付的发展使传统柜员服务需求大幅下降。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：ATM、移动银行、区块链技术、智能合约</p>
+                                        <p>建议转型方向：金融顾问、财富管理、数字银行产品开发</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">05</span>
+                                    <span class="col-span-5">快递分拣员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">物流运输</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">86%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">自动化分拣系统和机器人技术在物流行业的应用日益广泛。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：机器人分拣、计算机视觉识别、自动传送带系统</p>
+                                        <p>建议转型方向：物流规划、供应链管理、物流机器人维护</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">06</span>
+                                    <span class="col-span-5">文案撰写员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">广告营销</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">84%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">大型语言模型可以高效生成各种商业文案、广告语和产品描述。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：GPT系列AI模型、自动内容生成、情感分析</p>
+                                        <p>建议转型方向：创意策略、AI提示工程师、内容营销策划</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">07</span>
+                                    <span class="col-span-5">保险核保员</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">保险金融</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">82%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">AI和数据分析系统可以自动评估风险，处理更复杂的保险核保决策。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：机器学习风险模型、预测性分析、大数据处理</p>
+                                        <p>建议转型方向：保险产品设计、客户关系管理、风险咨询</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">08</span>
+                                    <span class="col-span-5">生产线装配工</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">制造业</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">80%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">工业自动化和机器人技术正快速替代传统生产线上的人工操作。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：工业机器人、自动化生产线、机器视觉检测</p>
+                                        <p>建议转型方向：机器人维护技师、自动化设备操作、质量控制</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">09</span>
+                                    <span class="col-span-5">基础会计</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">财务金融</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">78%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">财务软件和自动化系统可以处理大部分基础会计任务，包括记账和报表生成。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：会计软件、自动报表生成、电子发票处理</p>
+                                        <p>建议转型方向：财务分析、战略规划、税务咨询</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row">
+                                    <span class="col-span-1 text-gray-500">10</span>
+                                    <span class="col-span-5">客服代表</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">服务业</span>
+                                    <span class="col-span-3 text-right" style="color: #E85002;">76%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">聊天机器人和AI客服系统可以处理大部分常见查询和问题解答。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>替代技术：智能聊天机器人、自然语言处理、情绪分析</p>
+                                        <p>建议转型方向：复杂问题解决专家、客户体验设计、AI客服系统培训</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 低风险职业排行 -->
+                <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 glow-green">
+                    <div class="px-4 py-4 border-b border-gray-700 flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-white">低风险职业排行</h2>
+                        <a href="ranking.html" class="text-gray-500 hover:text-gray-400 text-sm">查看更多 →</a>
+                    </div>
+                    <div class="p-4 text-white">
+                        <div class="grid grid-cols-12 gap-2 text-sm text-gray-400 mb-2 px-2 py-3 bg-gray-700 rounded">
+                            <div class="col-span-1 text-left">序号</div>
+                            <div class="col-span-5 text-left">职业名称</div>
+                            <div class="col-span-3 text-left">所属行业</div>
+                            <div class="col-span-3 text-right">安全指数</div>
+                        </div>
+                        <ul class="space-y-1 mt-3">
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">01</span>
+                                    <span class="col-span-5">数据科学家</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">IT/数据</span>
+                                    <span class="col-span-3 text-right text-green-400">96%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">需求增长迅速，创新性工作难以被AI完全替代。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：复杂问题分析、算法设计、创新解决方案、跨领域知识整合</p>
+                                        <p>未来发展：AI工具辅助下工作效率提升10倍，更聚焦于业务理解和创新</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">02</span>
+                                    <span class="col-span-5">人工智能工程师</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">IT/AI</span>
+                                    <span class="col-span-3 text-right text-green-400">95%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">AI技术的开发和优化需要专业人才，处于技术前沿。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：算法研发、深度学习模型训练、高级编程能力</p>
+                                        <p>未来发展：需求持续增长，将更专注于创新算法设计和复杂系统集成</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">03</span>
+                                    <span class="col-span-5">医疗保健专家</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">医疗健康</span>
+                                    <span class="col-span-3 text-right text-green-400">93%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">医疗决策和患者关怀需要人性化接触，难以完全自动化。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：专业判断、病患沟通、情感支持、道德决策</p>
+                                        <p>未来发展：与AI诊断系统协作，专注复杂病例和人性化治疗</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- 新增低风险职业数据 -->
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">04</span>
+                                    <span class="col-span-5">心理健康顾问</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">心理咨询</span>
+                                    <span class="col-span-3 text-right text-green-400">92%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">心理健康服务需要高度的人际互动和情感理解，AI难以替代。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：情感共鸣、个性化疗法、伦理判断、复杂心理分析</p>
+                                        <p>未来发展：结合AI辅助工具提供更精准的干预和治疗方案</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">05</span>
+                                    <span class="col-span-5">教育创新专家</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">教育培训</span>
+                                    <span class="col-span-3 text-right text-green-400">91%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">教育领域需要持续创新和个性化指导，结合技术与教学经验。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：创新教学方法、因材施教、批判性思维培养</p>
+                                        <p>未来发展：AI辅助下的个性化教育设计和教学效果评估</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">06</span>
+                                    <span class="col-span-5">物联网专家</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">IT/物联网</span>
+                                    <span class="col-span-3 text-right text-green-400">90%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">物联网技术需要软硬件结合，系统集成和安全性设计的专业知识。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：跨学科技能、系统设计、安全架构、边缘计算</p>
+                                        <p>未来发展：智能家居、工业物联网和智慧城市的核心技术人才</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">07</span>
+                                    <span class="col-span-5">可再生能源工程师</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">能源环保</span>
+                                    <span class="col-span-3 text-right text-green-400">89%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">气候变化和可持续发展需求推动可再生能源领域的创新和发展。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：专业工程知识、创新设计、环境影响评估</p>
+                                        <p>未来发展：太阳能、风能和储能技术的快速发展创造大量需求</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">08</span>
+                                    <span class="col-span-5">机器人伦理学家</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">伦理/科技</span>
+                                    <span class="col-span-3 text-right text-green-400">88%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">随着AI和机器人技术发展，伦理问题变得更加重要，需要专业人才。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：伦理学专业知识、技术理解、政策制定能力</p>
+                                        <p>未来发展：参与AI系统伦理设计和监管框架制定</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">09</span>
+                                    <span class="col-span-5">品牌策略师</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">市场营销</span>
+                                    <span class="col-span-3 text-right text-green-400">87%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">品牌策略需要深刻的市场洞察、创造力和人性化理解。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：创意思维、消费者心理洞察、文化趋势分析</p>
+                                        <p>未来发展：结合AI数据分析工具，创造更精准的品牌体验</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="job-item">
+                                <div class="grid grid-cols-12 gap-2 items-center p-2 job-row low-risk">
+                                    <span class="col-span-1 text-gray-500">10</span>
+                                    <span class="col-span-5">AR/VR内容创作者</span>
+                                    <span class="col-span-3 text-gray-400 text-sm">数字创意</span>
+                                    <span class="col-span-3 text-right text-green-400">86%</span>
+                                </div>
+                                <div class="job-details p-3 mx-2 mt-1 mb-2">
+                                    <p class="text-gray-400 text-sm">增强和虚拟现实技术快速发展，需要创意和技术结合的专业人才。</p>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <p>核心优势：空间设计、交互体验、叙事能力、技术应用</p>
+                                        <p>未来发展：元宇宙和沉浸式体验设计的核心创作力量</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 已消亡职业排行被隐藏 -->
+            <!-- 
+            <div class="mt-6">
+                <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 glow-gray">
+                    <div class="px-4 py-3 border-b border-gray-700 flex justify-between items-center">
+                        <h2 class="text-xl font-bold text-gray-400">已消亡职业排行</h2>
+                        <a href="ranking.html" class="text-gray-500 hover:text-gray-400 text-sm">查看更多 →</a>
+                    </div>
+                    <div class="p-4 text-white">
+                        ... 这部分内容被隐藏 ...
+                    </div>
+                </div>
+            </div>
+            -->
         </div>
 
-        <!-- 用户评价部分 -->
-        <div class="py-16 bg-gray-50">
+        <!-- 添加时间线的CSS样式 -->
+        <style>
+            .extinct-timeline .grid {
+                transition: all 0.3s ease;
+            }
+            
+            .extinct-timeline .grid:hover {
+                transform: translateY(-5px);
+                /* 移除box-shadow效果 */
+                z-index: 10;
+            }
+            
+            /* 渐变背景动画 */
+            @keyframes gradientMove {
+                0% {
+                    transform: translate(0, 0) scale(1);
+                }
+                50% {
+                    transform: translate(-5%, -5%) scale(1.1);
+                }
+                100% {
+                    transform: translate(0, 0) scale(1);
+                }
+            }
+        </style>
+
+        
+
+        <!-- 功能介绍部分 -->
+        <div class="py-8">
             <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">用户评价</h2>
-                <p class="text-center text-gray-600 mb-12">来自各行各业的专业人士对我们的评价</p>
+                <h2 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-blue-600 mb-10 mt-20">AI职业分析平台</h2>
                 
-                <!-- 轮播控制按钮 -->
-                <div class="flex justify-center mb-8">
-                    <div class="flex space-x-2">
-                        <button class="testimonial-dot w-3 h-3 rounded-full bg-blue-600" data-index="0"></button>
-                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-index="1"></button>
-                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300" data-index="2"></button>
-                    </div>
-                </div>
-                
-                <!-- 轮播容器 -->
-                <div class="relative overflow-hidden" style="height: 350px;">
-                    <!-- 第一组评价 -->
-                    <div class="testimonial-group absolute w-full transition-all duration-500 opacity-100" style="transform: translateX(0);">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <!-- 评价1 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"这个平台帮助我重新评估了自己的职业发展方向。作为一名传统会计，我现在正在学习数据分析技能，为未来做好准备。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-blue-600 font-semibold">LW</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">李伟</h4>
-                                        <p class="text-sm text-gray-500">财务会计师</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 评价2 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"职业测评结果非常准确！根据建议，我从前端开发转向了AI工程方向，现在工作更有安全感，薪资也提高了30%。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-green-600 font-semibold">ZM</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">张敏</h4>
-                                        <p class="text-sm text-gray-500">AI工程师</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 评价3 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"作为一名职业顾问，我经常推荐客户使用这个平台。数据驱动的分析和建议让我的咨询工作更有说服力。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-purple-600 font-semibold">WJ</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">王静</h4>
-                                        <p class="text-sm text-gray-500">职业规划顾问</p>
-                                    </div>
-                                </div>
-                            </div>
+                <!-- 单一大型功能模块 -->
+                <div class="rounded-xl shadow-xl border border-gray-700 hover:border-orange-500 transition-colors overflow-hidden" style="min-height: 500px; position: relative;">
+                    <!-- 流动动画背景 -->
+                    <div class="absolute inset-0 bg-gray-800" style="z-index: 0; overflow: hidden;">
+                        <!-- 主要流动背景 - 水波纹效果第一层 -->
+                        <div class="absolute inset-0 opacity-80" style="background: linear-gradient(135deg, rgba(232, 80, 2, 0.6) 0%, rgba(139, 92, 246, 0.6) 100%); animation: flowBackground 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;">
                         </div>
+                        <!-- 动态光斑效果 -->
+                        <div class="absolute inset-0" style="animation: pulseGlow 8s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;">
+                            <div class="absolute inset-0" style="background: radial-gradient(circle at 30% 50%, rgba(232, 80, 2, 0.8), transparent 60%),
+                                                                radial-gradient(circle at 70% 50%, rgba(139, 92, 246, 0.8), transparent 60%);"></div>
+                        </div>
+                        <!-- 水波纹效果第二层 - 反向流动 -->
+                        <div class="absolute inset-0 opacity-40" style="background: linear-gradient(45deg, rgba(232, 80, 2, 0.4) 0%, rgba(139, 92, 246, 0.4) 100%); animation: flowBackground 9s cubic-bezier(0.4, 0, 0.6, 1) infinite reverse;"></div>
+                        <!-- 水波纹效果第三层 - 更慢的流动 -->
+                        <div class="absolute inset-0 opacity-30" style="background: linear-gradient(90deg, rgba(139, 92, 246, 0.3) 0%, rgba(232, 80, 2, 0.3) 100%); animation: flowBackground 12s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></div>
+                        <!-- 水波纹效果第四层 - 专门的水波纹动画 -->
+                        <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, rgba(232, 80, 2, 0.2) 70%, rgba(139, 92, 246, 0.1) 100%); animation: waterWave 7s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;"></div>
+                        <!-- 水波纹效果第五层 - 交错的水波纹动画 -->
+                        <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at center, rgba(232, 80, 2, 0.1) 0%, rgba(139, 92, 246, 0.2) 70%, rgba(232, 80, 2, 0.1) 100%); animation: waterWave 6s cubic-bezier(0.34, 1.56, 0.64, 1) infinite reverse;"></div>
                     </div>
                     
-                    <!-- 第二组评价 -->
-                    <div class="testimonial-group absolute w-full transition-all duration-500 opacity-0" style="transform: translateX(100%);">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <!-- 评价4 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"排行榜功能让我对不同行业的AI风险有了清晰认识。作为一名即将毕业的学生，这帮助我做出了更明智的专业选择。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-red-600 font-semibold">CY</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">陈阳</h4>
-                                        <p class="text-sm text-gray-500">大学生</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 评价5 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"我们公司使用这个平台来指导员工培训计划。数据显示哪些技能最有价值，帮助我们做出更好的人才发展决策。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-yellow-600 font-semibold">SL</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">孙丽</h4>
-                                        <p class="text-sm text-gray-500">人力资源总监</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 评价6 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"软件工程师职业风险报告非常详尽，让我明白了如何在AI时代保持竞争力。现在我正专注于提升系统设计和架构能力。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-blue-600 font-semibold">LB</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">刘博</h4>
-                                        <p class="text-sm text-gray-500">高级软件工程师</p>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="flex flex-col items-center justify-center h-full p-16 pt-36 relative z-10">
+                        <p class="text-3xl text-center text-white mb-16 max-w-3xl font-medium">全方位AI职业分析平台，助您洞察未来职业趋势，规划职业发展方向</p>
+                        
+                        <!-- 功能模块按钮 -->
+                        <div class="text-center">
+                            <a href="assessment.html" class="inline-block bg-white text-gray-800 px-12 py-5 rounded-lg hover:bg-gray-100 transition duration-300 shadow-lg text-xl font-bold">
+                                开始评测 →
+                            </a>
                         </div>
                     </div>
-                    
-                    <!-- 第三组评价 -->
-                    <div class="testimonial-group absolute w-full transition-all duration-500 opacity-0" style="transform: translateX(100%);">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <!-- 评价7 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"通过这个平台，我了解到了教育行业的AI发展趋势。作为一名教师，我现在更注重培养学生的创造力和批判性思维。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-indigo-600 font-semibold">ZL</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">赵亮</h4>
-                                        <p class="text-sm text-gray-500">高中教师</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 评价8 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"作为一名医疗工作者，这个平台帮助我认识到AI在医疗领域的应用前景。我现在正在学习如何与AI系统协作提高诊断准确率。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-pink-600 font-semibold">HY</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">黄燕</h4>
-                                        <p class="text-sm text-gray-500">放射科医生</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 评价9 -->
-                            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                                <p class="text-gray-600 mb-4">"这个平台的数据分析让我对自己的律师职业有了新的认识。我现在更专注于复杂案件和情感咨询，这些是AI难以替代的领域。"</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-3">
-                                        <span class="text-teal-600 font-semibold">MJ</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">马健</h4>
-                                        <p class="text-sm text-gray-500">律师</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 导航箭头 -->
-                <div class="flex justify-between items-center mt-8">
-                    <button id="prev-testimonial" class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                    </button>
-                    <button id="next-testimonial" class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </button>
                 </div>
             </div>
         </div>
-    </main>
+
+        <!-- 用户评价模块 - Cursor风格 -->
+<section class="py-8">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-blue-600 mb-10 mt-20">各行业用户对我们的评价</h2>
+      </div>
+      
+      <!-- 评价卡片网格 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 评价卡片 1 -->
+        <div class="bg-gray-800 rounded-xl p-6 transition-all duration-300 hover:bg-gray-750 hover:shadow-xl hover:shadow-blue-900/20">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="text-white font-semibold">张晓明</h4>
+              <p class="text-gray-400 text-sm">软件工程师 · 上海</p>
+            </div>
+          </div>
+          <div class="flex items-center mb-3">
+            <div class="flex text-orange-400">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="ml-2 text-white font-medium">5.0</span>
+          </div>
+          <p class="text-gray-300 mb-4">"这个平台提供的职业风险预测非常准确，帮助我制定了更明智的职业规划。时间线功能直观地展示了职业变迁，让我对未来有了更清晰的认识。"</p>
+          <div class="text-gray-400 text-sm flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+            2023年10月25日
+          </div>
+        </div>
+        
+        <!-- 评价卡片 2 -->
+        <div class="bg-gray-800 rounded-xl p-6 transition-all duration-300 hover:bg-gray-750 hover:shadow-xl hover:shadow-blue-900/20">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="text-white font-semibold">刘芳</h4>
+              <p class="text-gray-400 text-sm">教育工作者 · 北京</p>
+            </div>
+          </div>
+          <div class="flex items-center mb-3">
+            <div class="flex text-orange-400">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-700">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="ml-2 text-white font-medium">4.0</span>
+          </div>
+          <p class="text-gray-300 mb-4">"作为教育工作者，我向学生推荐了这个平台，帮助他们了解未来就业趋势。职业消亡时间线是一个特别好的功能，让学生直观理解技术变革对职业的影响。"</p>
+          <div class="text-gray-400 text-sm flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+            2023年10月15日
+          </div>
+        </div>
+        
+        <!-- 评价卡片 3 -->
+        <div class="bg-gray-800 rounded-xl p-6 transition-all duration-300 hover:bg-gray-750 hover:shadow-xl hover:shadow-blue-900/20">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="text-white font-semibold">王磊</h4>
+              <p class="text-gray-400 text-sm">职业顾问 · 广州</p>
+            </div>
+          </div>
+          <div class="flex items-center mb-3">
+            <div class="flex text-orange-400">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="ml-2 text-white font-medium">5.0</span>
+          </div>
+          <p class="text-gray-300 mb-4">"我在职业咨询工作中使用这个平台已有半年，数据非常全面且可靠。客户特别喜欢风险预测功能，帮助他们在职业选择中更有信心。强烈推荐给所有职业规划师！"</p>
+          <div class="text-gray-400 text-sm flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+            2023年09月30日
+          </div>
+        </div>
+        
+        <!-- 评价卡片 4 -->
+        <div class="bg-gray-800 rounded-xl p-6 transition-all duration-300 hover:bg-gray-750 hover:shadow-xl hover:shadow-blue-900/20">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/22.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="text-white font-semibold">陈雨婷</h4>
+              <p class="text-gray-400 text-sm">应届毕业生 · 杭州</p>
+            </div>
+          </div>
+          <div class="flex items-center mb-3">
+            <div class="flex text-orange-400">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-700">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="ml-2 text-white font-medium">4.0</span>
+          </div>
+          <p class="text-gray-300 mb-4">"作为应届生，在就业选择上面临很多困惑。这个平台的职业预测功能帮我避开了高风险行业，改变了我的就业方向。时间线设计非常直观，让我对职业发展有了清晰认识。"</p>
+          <div class="text-gray-400 text-sm flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+            2023年10月08日
+          </div>
+        </div>
+        
+             <!-- 评价卡片 5 -->
+      <div class="bg-gray-800 rounded-xl p-6 transition-all duration-300 hover:bg-gray-750 hover:shadow-xl hover:shadow-blue-900/20">
+        <div class="flex items-center mb-4">
+          <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+          <div>
+            <h4 class="text-white font-semibold">李明辉</h4>
+            <p class="text-gray-400 text-sm">数据分析师 · 深圳</p>
+          </div>
+        </div>
+        <div class="flex items-center mb-3">
+          <div class="flex text-orange-400">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-700">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="ml-2 text-white font-medium">4.0</span>
+        </div>
+        <p class="text-gray-300 mb-4">"作为数据分析师，我很欣赏这个平台的预测算法和数据可视化。职业风险评估非常精准，时间线设计也很有创意。建议增加更多行业细分数据，会更加完善。"</p>
+        <div class="text-gray-400 text-sm flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          </svg>
+          2023年09月20日
+        </div>
+      </div>
+      
+      <!-- 评价卡片 6 -->
+      <div class="bg-gray-800 rounded-xl p-6 transition-all duration-300 hover:bg-gray-750 hover:shadow-xl hover:shadow-blue-900/20">
+        <div class="flex items-center mb-4">
+          <img src="https://randomuser.me/api/portraits/women/36.jpg" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+          <div>
+            <h4 class="text-white font-semibold">吴雪琪</h4>
+            <p class="text-gray-400 text-sm">HR经理 · 成都</p>
+          </div>
+        </div>
+        <div class="flex items-center mb-3">
+          <div class="flex text-orange-400">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <span class="ml-2 text-white font-medium">5.0</span>
+        </div>
+        <p class="text-gray-300 mb-4">"这个平台已成为我们公司人才战略的重要参考工具。通过它，我们调整了招聘方向，避免了即将消亡的职位，投资更多于低风险职业培训。新的时间线设计非常赞！"</p>
+        <div class="text-gray-400 text-sm flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          </svg>
+          2023年10月02日
+        </div>
+      </div>
+    </div>
+    
+   
 
     <!-- 页脚部分 -->
-    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
-            <p>© 2023 AI职业墓场. 保留所有权利.</p>
-        </div>
-    </footer>
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+    
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
+
+    <!-- 登录/注册模态框已移至modal-component.html -->
 
     <script>
-        // 检查用户是否已登录
+        // 将showModal函数从局部作用域移到全局作用域
+        function showModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+
+        // 将hideModal函数定义到全局作用域
+        function hideModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = ''; // 恢复背景滚动
+            }, 300);
+        }
+
+        // 修改checkLoginStatus函数，确保按钮的背景色正确显示
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const userEmail = localStorage.getItem('userEmail');
             const userName = localStorage.getItem('userName') || '用户';
+            const userAvatar = localStorage.getItem('userAvatar');
+            const avatarBg = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+            const avatarText = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
             const navAuthElement = document.getElementById('nav-auth');
             
             if (isLoggedIn && userEmail) {
                 // 用户已登录，显示用户头像和下拉菜单
                 const userInitial = userName.charAt(0).toUpperCase();
+                
+                let avatarHTML = '';
+                if (userAvatar) {
+                    avatarHTML = `<img src="${userAvatar}" alt="用户头像" class="w-8 h-8 rounded-full object-cover">`;
+                } else {
+                    avatarHTML = `<div class="w-8 h-8 ${avatarBg} rounded-full flex items-center justify-center ${avatarText} font-bold">${userInitial}</div>`;
+                }
+                
                 navAuthElement.innerHTML = `
                     <div class="relative group">
-                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
-                                ${userInitial}
-                            </div>
-                            <span class="hidden md:inline">${userName}</span>
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-300 hover:text-white transition duration-300">
+                            ${avatarHTML}
+                            <span class="hidden md:inline text-sm">${userName}</span>
                         </a>
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
-                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
-                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        <div class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">退出登录</a>
                         </div>
                     </div>
                 `;
@@ -496,21 +1240,35 @@
                 document.getElementById('logout-btn').addEventListener('click', function(e) {
                     e.preventDefault();
                     localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userEmail');
                     localStorage.removeItem('userName');
-                    window.location.reload();
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userAvatar');
+                    localStorage.removeItem('userAvatarColor');
+                    localStorage.removeItem('userAvatarTextColor');
+                    checkLoginStatus();
                 });
             } else {
-                // 用户未登录，显示登录和注册按钮
+                // 用户未登录，显示账户按钮打开模态框
                 navAuthElement.innerHTML = `
-                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
-                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                    <button id="show-auth-modal" class="py-2 px-4 text-white rounded-md hover:opacity-90 transition duration-300 text-sm tracking-wide" style="background: linear-gradient(135deg, #E85002 0%, #8B5CF6 100%);">
+                        账户登录
+                    </button>
                 `;
+                
+                // 确保DOM已加载完成再添加事件监听
+                setTimeout(() => {
+                    const showAuthModalBtn = document.getElementById('show-auth-modal');
+                    if (showAuthModalBtn) {
+                        showAuthModalBtn.addEventListener('click', function() {
+                            showModal();
+                        });
+                    }
+                }, 100);
             }
         }
         
-        // 页面加载时检查登录状态
-        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+        // 页面加载时初始化
+        checkLoginStatus();
 
         function toggleJobDetails(element) {
             // 获取下一个兄弟元素（即详情行）
@@ -519,10 +1277,10 @@
             // 切换详情行的显示状态
             if (detailsRow.classList.contains('hidden')) {
                 detailsRow.classList.remove('hidden');
-                element.classList.add('bg-gray-100');
+                element.classList.add('bg-indigo-50');
             } else {
                 detailsRow.classList.add('hidden');
-                element.classList.remove('bg-gray-100');
+                element.classList.remove('bg-indigo-50');
             }
         }
         
@@ -556,9 +1314,9 @@
                 dots.forEach((dot, index) => {
                     if (index === currentIndex) {
                         dot.classList.remove('bg-gray-300');
-                        dot.classList.add('bg-blue-600');
+                        dot.classList.add('bg-orange-500');
                     } else {
-                        dot.classList.remove('bg-blue-600');
+                        dot.classList.remove('bg-orange-500');
                         dot.classList.add('bg-gray-300');
                     }
                 });
@@ -604,6 +1362,139 @@
             
             // 初始化自动轮播
             startAutoplay();
+        });
+
+        // 模态框功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('auth-modal');
+            const closeModal = document.getElementById('close-modal');
+            const loginTabBtn = document.getElementById('login-tab-btn');
+            const registerTabBtn = document.getElementById('register-tab-btn');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const formContainer = document.querySelector('.tab-container .flex');
+            const loginBtn = document.getElementById('login-btn');
+            const registerBtn = document.getElementById('register-btn');
+            
+            // 切换到登录表单
+            function showLoginForm() {
+                formContainer.style.transform = 'translateX(0)';
+                loginTabBtn.classList.add('text-orange-500', 'border-orange-500');
+                loginTabBtn.classList.remove('text-gray-400', 'border-transparent');
+                registerTabBtn.classList.add('text-gray-400', 'border-transparent');
+                registerTabBtn.classList.remove('text-orange-500', 'border-orange-500');
+            }
+            
+            // 切换到注册表单
+            function showRegisterForm() {
+                formContainer.style.transform = 'translateX(-100%)';
+                registerTabBtn.classList.add('text-orange-500', 'border-orange-500');
+                registerTabBtn.classList.remove('text-gray-400', 'border-transparent');
+                loginTabBtn.classList.add('text-gray-400', 'border-transparent');
+                loginTabBtn.classList.remove('text-orange-500', 'border-orange-500');
+            }
+            
+            // 事件监听器
+            loginTabBtn.addEventListener('click', showLoginForm);
+            registerTabBtn.addEventListener('click', showRegisterForm);
+            closeModal.addEventListener('click', hideModal);
+            
+            // 登录功能
+            loginBtn.addEventListener('click', function() {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                const remember = document.getElementById('remember-me').checked;
+                
+                // 这里是简单的模拟登录，实际应用中应该有后端验证
+                if (email && password) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userName', email.split('@')[0]);
+                    
+                    // 生成随机头像颜色
+                    const colors = ['bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100', 'bg-indigo-100'];
+                    const textColors = ['text-blue-600', 'text-green-600', 'text-purple-600', 'text-pink-600', 'text-indigo-600'];
+                    const randomIndex = Math.floor(Math.random() * colors.length);
+                    
+                    localStorage.setItem('userAvatarColor', colors[randomIndex]);
+                    localStorage.setItem('userAvatarTextColor', textColors[randomIndex]);
+                    
+                    if (remember) {
+                        // 如果选择了"记住我"，可以设置cookie或更长时间的localStorage
+                    }
+                    
+                    hideModal();
+                    checkLoginStatus();
+                } else {
+                    alert('请输入邮箱和密码');
+                }
+            });
+            
+            // 注册功能
+            registerBtn.addEventListener('click', function() {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                const agreeTerms = document.getElementById('agree-terms').checked;
+                
+                if (!name || !email || !password) {
+                    alert('请完成所有必填字段');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    alert('两次输入的密码不一致');
+                    return;
+                }
+                
+                if (!agreeTerms) {
+                    alert('请同意隐私协议和使用条款');
+                    return;
+                }
+                
+                // 模拟注册成功
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', name);
+                
+                // 生成随机头像颜色
+                const colors = ['bg-blue-100', 'bg-green-100', 'bg-purple-100', 'bg-pink-100', 'bg-indigo-100'];
+                const textColors = ['text-blue-600', 'text-green-600', 'text-purple-600', 'text-pink-600', 'text-indigo-600'];
+                const randomIndex = Math.floor(Math.random() * colors.length);
+                
+                localStorage.setItem('userAvatarColor', colors[randomIndex]);
+                localStorage.setItem('userAvatarTextColor', textColors[randomIndex]);
+                
+                hideModal();
+                checkLoginStatus();
+            });
+        });
+
+        // 排行榜行点击展开详情功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const jobRows = document.querySelectorAll('.job-row');
+            
+            jobRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    // 获取父元素 (job-item)
+                    const jobItem = this.parentElement;
+                    
+                    // 切换 active 类
+                    if (jobItem.classList.contains('active')) {
+                        jobItem.classList.remove('active');
+                    } else {
+                        // 关闭其他展开的项目
+                        document.querySelectorAll('.job-item.active').forEach(item => {
+                            if (item !== jobItem) {
+                                item.classList.remove('active');
+                            }
+                        });
+                        
+                        jobItem.classList.add('active');
+                    }
+                });
+            });
         });
     </script>
 </body>

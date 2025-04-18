@@ -40,39 +40,25 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-900 text-gray-100">
 
-    <!-- 导航栏部分 -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between">
-                <div class="flex space-x-7">
-                    <a href="index.html" class="flex items-center py-4 px-2">
-                        <span class="font-semibold text-gray-700 text-lg">Professional Cemetery</span>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-1">
-                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
-                    <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
-                    <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
-                    <div id="nav-auth" class="flex items-center space-x-1">
-                        <!-- 这里将由JavaScript动态填充登录/注册按钮或用户信息 -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- 加载导航栏脚本 -->
+    <script src="nav-component.js"></script>
+    
+    <!-- 导航栏容器 -->
+    <div id="nav-container">
+    </div>
 
     <!-- 主内容部分 -->
     <main class="max-w-4xl mx-auto px-4 py-8">
         <!-- 结果概览 -->
-        <div class="animate__animated animate__fadeInDown bg-white p-8 rounded-lg shadow-md mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">职业风险测评结果</h1>
+        <div class="animate__animated animate__fadeInDown bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h1 class="text-3xl font-bold text-orange-500 mb-6 text-center">职业风险测评结果</h1>
             
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="mb-6 md:mb-0">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-2">您的职业：<span id="job-title" class="text-blue-600">软件工程师</span></h2>
-                    <p class="text-gray-600" id="job-description">基于您的测评回答，我们对您当前职业的AI替代风险进行了分析</p>
+                    <h2 class="text-xl font-semibold text-gray-300 mb-2">您的职业：<span id="job-title" class="text-blue-400">软件工程师</span></h2>
+                    <p class="text-gray-400" id="job-description">基于您的测评回答，我们对您当前职业的AI替代风险进行了分析</p>
                 </div>
                 
                 <div class="text-center">
@@ -86,115 +72,125 @@
         </div>
         
         <!-- 风险等级说明 -->
-        <div class="animate__animated animate__fadeInUp bg-white p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">风险等级说明</h2>
+        <div class="animate__animated animate__fadeInUp bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-orange-500 mb-4">风险等级说明</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="border-l-4 border-red-500 pl-4 py-2">
-                    <h3 class="text-lg font-semibold text-red-600 mb-2">高风险 (26-33分)</h3>
-                    <p class="text-gray-600 text-sm">您的当前职业有很高的概率在未来被技术大量替代，需要尽早采取行动应对。</p>
+                <div class="border-l-4 border-red-500 pl-4 py-2 bg-gray-700">
+                    <h3 class="text-lg font-semibold text-red-400 mb-2">高风险 (26-33分)</h3>
+                    <p class="text-gray-300 text-sm">您的当前职业有很高的概率在未来被技术大量替代，需要尽早采取行动应对。</p>
                 </div>
                 
-                <div class="border-l-4 border-orange-500 pl-4 py-2">
-                    <h3 class="text-lg font-semibold text-orange-600 mb-2">中风险 (17-25分)</h3>
-                    <p class="text-gray-600 text-sm">您的岗位受到一定程度的技术替代威胁。建议您未雨绸缪，提前做好职业规划。</p>
+                <div class="border-l-4 border-orange-500 pl-4 py-2 bg-gray-700">
+                    <h3 class="text-lg font-semibold text-orange-400 mb-2">中风险 (17-25分)</h3>
+                    <p class="text-gray-300 text-sm">您的岗位受到一定程度的技术替代威胁。建议您未雨绸缪，提前做好职业规划。</p>
                 </div>
                 
-                <div class="border-l-4 border-yellow-500 pl-4 py-2">
-                    <h3 class="text-lg font-semibold text-yellow-600 mb-2">低风险 (8-16分)</h3>
-                    <p class="text-gray-600 text-sm">您的当前岗位在可见的将来被技术取代的风险较低。您在工作中具备一定的不可替代性。</p>
+                <div class="border-l-4 border-yellow-500 pl-4 py-2 bg-gray-700">
+                    <h3 class="text-lg font-semibold text-yellow-400 mb-2">低风险 (8-16分)</h3>
+                    <p class="text-gray-300 text-sm">您的当前岗位在可见的将来被技术取代的风险较低。您在工作中具备一定的不可替代性。</p>
                 </div>
                 
-                <div class="border-l-4 border-green-500 pl-4 py-2">
-                    <h3 class="text-lg font-semibold text-green-600 mb-2">无风险 (0-7分)</h3>
-                    <p class="text-gray-600 text-sm">恭喜！根据测评，您当前的岗位几乎不受现有技术替代的威胁，在可预见的将来属于安全的职业。</p>
+                <div class="border-l-4 border-green-500 pl-4 py-2 bg-gray-700">
+                    <h3 class="text-lg font-semibold text-green-400 mb-2">无风险 (0-7分)</h3>
+                    <p class="text-gray-300 text-sm">恭喜！根据测评，您当前的岗位几乎不受现有技术替代的威胁，在可预见的将来属于安全的职业。</p>
                 </div>
             </div>
         </div>
         
         <!-- 详细分析 -->
-        <div class="animate__animated animate__fadeInUp bg-white p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">详细分析</h2>
+        <div class="animate__animated animate__fadeInUp bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-orange-500 mb-6">详细分析</h2>
             
-            <div id="analysis-content" class="prose max-w-none">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4">软件工程师职业风险分析</h3>
+            <div id="analysis-content" class="prose max-w-none text-gray-300">
+                <h3 class="text-xl font-semibold text-orange-400 mb-4">软件工程师职业风险分析</h3>
                 
-                <p class="mb-4">软件工程师是一种以<strong>编写和维护软件</strong>为主要职责的职业，涵盖从需求分析、程序设计、编码实现到测试部署的整个软件开发流程。一直以来，软件工程师被视为科技领域的核心岗位，其需求量巨大。</p>
+                <p class="mb-4">软件工程师是一种以<strong class="text-blue-400">编写和维护软件</strong>为主要职责的职业，涵盖从需求分析、程序设计、编码实现到测试部署的整个软件开发流程。一直以来，软件工程师被视为科技领域的核心岗位，其需求量巨大。</p>
                 
-                <p class="mb-4">然而，随着近年来人工智能（AI）技术的飞速发展，这一传统"黄金职业"也开始面对新的挑战。自从OpenAI在2022年底推出了强大的对话式AI模型ChatGPT以来，AI在编程领域的能力令业界震惊。例如，谷歌公司曾模拟让ChatGPT参加编程面试，结果发现它在理论上<strong>可以被聘为谷歌的入门级程序员</strong>。</p>
+                <p class="mb-4">然而，随着近年来人工智能（AI）技术的飞速发展，这一传统"黄金职业"也开始面对新的挑战。自从OpenAI在2022年底推出了强大的对话式AI模型ChatGPT以来，AI在编程领域的能力令业界震惊。例如，谷歌公司曾模拟让ChatGPT参加编程面试，结果发现它在理论上<strong class="text-blue-400">可以被聘为谷歌的入门级程序员</strong>。</p>
                 
-                <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-3">分等级风险分析</h4>
+                <h4 class="text-lg font-semibold text-orange-400 mt-6 mb-3">分等级风险分析</h4>
                 
                 <ul class="list-disc pl-6 mb-4">
-                    <li class="mb-2"><strong>初级工程师（Junior）</strong>：AI对初级软件工程师的取代风险被普遍认为是最高的。原因很简单，很多初级程序员从事的工作内容相对基础、重复和标准化，例如根据明确的需求编写简单模块、搭建 CRUD 接口、修改Bug、撰写测试用例等。</li>
-                    <li class="mb-2"><strong>中级工程师（Mid-level）</strong>：有了几年经验的中级软件工程师，所受AI冲击的风险介于初级和高级之间。一方面，AI对他们的编码工作也会产生显著影响。</li>
-                    <li class="mb-2"><strong>高级工程师（Senior）</strong>：高级软件工程师通常拥有5年以上经验，不仅精通技术，还具备系统设计、架构规划和团队领导能力。相对而言，他们受到AI替代的风险较低。</li>
+                    <li class="mb-2"><strong class="text-blue-400">初级工程师（Junior）</strong>：AI对初级软件工程师的取代风险被普遍认为是最高的。原因很简单，很多初级程序员从事的工作内容相对基础、重复和标准化，例如根据明确的需求编写简单模块、搭建 CRUD 接口、修改Bug、撰写测试用例等。</li>
+                    <li class="mb-2"><strong class="text-blue-400">中级工程师（Mid-level）</strong>：有了几年经验的中级软件工程师，所受AI冲击的风险介于初级和高级之间。一方面，AI对他们的编码工作也会产生显著影响。</li>
+                    <li class="mb-2"><strong class="text-blue-400">高级工程师（Senior）</strong>：高级软件工程师通常拥有5年以上经验，不仅精通技术，还具备系统设计、架构规划和团队领导能力。相对而言，他们受到AI替代的风险较低。</li>
                 </ul>
             </div>
         </div>
         
         <!-- 职业发展建议 -->
-        <div class="animate__animated animate__fadeInUp bg-white p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">职业发展建议</h2>
+        <div class="animate__animated animate__fadeInUp bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-orange-500 mb-6">职业发展建议</h2>
             
             <div id="recommendations" class="space-y-6">
-                <div class="p-4 border-l-4 border-blue-500 bg-blue-50 rounded-r">
-                    <h3 class="text-lg font-semibold text-blue-700 mb-2">1. 将AI纳入技能栈，成为AI的主人而非受害者</h3>
-                    <p class="text-gray-700">熟悉并精通AI工具的使用能够显著提升工作效率和质量。学习如何有效地使用GitHub Copilot、ChatGPT等AI编程助手，将它们作为您的"超级助手"而非竞争对手。</p>
+                <div class="p-4 border-l-4 border-blue-500 bg-gray-700 rounded-r">
+                    <h3 class="text-lg font-semibold text-blue-400 mb-2">1. 将AI纳入技能栈，成为AI的主人而非受害者</h3>
+                    <p class="text-gray-300">熟悉并精通AI工具的使用能够显著提升工作效率和质量。学习如何有效地使用GitHub Copilot、ChatGPT等AI编程助手，将它们作为您的"超级助手"而非竞争对手。</p>
                 </div>
                 
-                <div class="p-4 border-l-4 border-purple-500 bg-purple-50 rounded-r">
-                    <h3 class="text-lg font-semibold text-purple-700 mb-2">2. 注重培养不可替代的软技能和创造力</h3>
-                    <p class="text-gray-700">沟通、协作、洞察需求、创新等能力是AI难以取代的。平时有意识地锻炼表达能力和团队合作能力，例如在技术分享会上演讲，在团队讨论中主动提出见解等。</p>
+                <div class="p-4 border-l-4 border-purple-500 bg-gray-700 rounded-r">
+                    <h3 class="text-lg font-semibold text-purple-400 mb-2">2. 注重培养不可替代的软技能和创造力</h3>
+                    <p class="text-gray-300">沟通、协作、洞察需求、创新等能力是AI难以取代的。平时有意识地锻炼表达能力和团队合作能力，例如在技术分享会上演讲，在团队讨论中主动提出见解等。</p>
                 </div>
                 
-                <div class="p-4 border-l-4 border-green-500 bg-green-50 rounded-r">
-                    <h3 class="text-lg font-semibold text-green-700 mb-2">3. 持续学习和再培训</h3>
-                    <p class="text-gray-700">AI的发展使得终身学习更加重要。需要及时根据行业变化更新知识结构。可以针对自己的职业规划，系统性地学习新的领域：如对AI感兴趣的程序员可以进修机器学习课程。</p>
+                <div class="p-4 border-l-4 border-green-500 bg-gray-700 rounded-r">
+                    <h3 class="text-lg font-semibold text-green-400 mb-2">3. 持续学习和再培训</h3>
+                    <p class="text-gray-300">AI的发展使得终身学习更加重要。需要及时根据行业变化更新知识结构。可以针对自己的职业规划，系统性地学习新的领域：如对AI感兴趣的程序员可以进修机器学习课程。</p>
                 </div>
                 
-                <div class="p-4 border-l-4 border-yellow-500 bg-yellow-50 rounded-r">
-                    <h3 class="text-lg font-semibold text-yellow-700 mb-2">4. 规划职业路径，提前应对可能的转型</h3>
-                    <p class="text-gray-700">认真思考自己未来3-5年的职业方向。问自己：我的兴趣和强项在哪里？AI对我目前岗位的核心技能有多大影响？我是否需要转变跑道？</p>
+                <div class="p-4 border-l-4 border-yellow-500 bg-gray-700 rounded-r">
+                    <h3 class="text-lg font-semibold text-yellow-400 mb-2">4. 规划职业路径，提前应对可能的转型</h3>
+                    <p class="text-gray-300">认真思考自己未来3-5年的职业方向。问自己：我的兴趣和强项在哪里？AI对我目前岗位的核心技能有多大影响？我是否需要转变跑道？</p>
                 </div>
                 
-                <div class="p-4 border-l-4 border-red-500 bg-red-50 rounded-r">
-                    <h3 class="text-lg font-semibold text-red-700 mb-2">5. 关注行业动向，建立人脉网络</h3>
-                    <p class="text-gray-700">AI时代瞬息万变，保持对行业趋势的敏锐非常重要。多利用业内媒体、技术社区获取最新信息，了解哪些技能正在变得抢手，哪些岗位可能萎缩。</p>
+                <div class="p-4 border-l-4 border-red-500 bg-gray-700 rounded-r">
+                    <h3 class="text-lg font-semibold text-red-400 mb-2">5. 关注行业动向，建立人脉网络</h3>
+                    <p class="text-gray-300">AI时代瞬息万变，保持对行业趋势的敏锐非常重要。多利用业内媒体、技术社区获取最新信息，了解哪些技能正在变得抢手，哪些岗位可能萎缩。</p>
                 </div>
             </div>
             
             <div class="mt-8 text-center">
-                <p class="text-gray-700 italic mb-4">"AI时代，危机与机遇并存，唯有学习与变革并举。"</p>
-                <a href="assessment.html" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">重新测评</a>
+                <p class="text-gray-400 italic mb-4">"AI时代，危机与机遇并存，唯有学习与变革并举。"</p>
+                <a href="assessment.html" class="inline-block bg-gradient-to-r from-orange-500 to-blue-600 text-white px-6 py-2 rounded-md hover:opacity-90 transition-opacity">重新测评</a>
             </div>
         </div>
     </main>
 
-    <!-- 页脚部分 -->
-    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
-            <p>© 2023 Professional Cemetery. 保留所有权利.</p>
-        </div>
-    </footer>
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+    
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
 
     <script>
-        // 检查用户是否已登录
+        // 修改checkLoginStatus函数，支持自定义头像
         function checkLoginStatus() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const userAvatar = localStorage.getItem('userAvatar');
+            const avatarBg = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+            const avatarText = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
             const navAuthElement = document.getElementById('nav-auth');
             
             if (isLoggedIn && userEmail) {
-                // 用户已登录，显示用户信息和退出按钮
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                
+                let avatarHTML = '';
+                if (userAvatar) {
+                    avatarHTML = `<img src="${userAvatar}" alt="用户头像" class="w-8 h-8 rounded-full object-cover">`;
+                } else {
+                    avatarHTML = `<div class="w-8 h-8 ${avatarBg} rounded-full flex items-center justify-center ${avatarText} font-bold">${userInitial}</div>`;
+                }
+                
                 navAuthElement.innerHTML = `
                     <div class="relative group">
-                        <button class="flex items-center space-x-1 py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
-                            <span>${userEmail}</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            ${avatarHTML}
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
                         <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
                             <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
                             <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
@@ -206,9 +202,12 @@
                 document.getElementById('logout-btn').addEventListener('click', function(e) {
                     e.preventDefault();
                     localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userEmail');
                     localStorage.removeItem('userName');
-                    window.location.reload();
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userAvatar');
+                    localStorage.removeItem('userAvatarColor');
+                    localStorage.removeItem('userAvatarTextColor');
+                    window.location.href = 'index.html';
                 });
             } else {
                 // 用户未登录，显示登录和注册按钮
@@ -301,4 +300,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

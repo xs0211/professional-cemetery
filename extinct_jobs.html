@@ -36,7 +36,7 @@
                     </a>
                 </div>
                 <div class="flex items-center space-x-1">
-                    <a href="home.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
+                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">首页</a>
                     <a href="ranking.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">排行榜</a>
                     <a href="extinct_jobs.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">消亡职业</a>
                     <a href="assessment.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">职业测评</a>
@@ -47,57 +47,56 @@
 
     <!-- 主内容部分 -->
     <main class="max-w-6xl mx-auto px-4 py-8">
-        <!-- 标题部分 -->
+    <!-- 标题部分 -->
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">消亡职业</h1>
             <p class="text-gray-600">以下职业在未来可能因自动化而消失</p>
         </div>
 
-        <!-- 消亡职业列表部分 -->
+    <!-- 消亡职业列表部分 -->
         <div class="space-y-4">
             <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
                 <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📦 收银员</summary>
                 <div class="mt-2 text-gray-600 pl-4">
                     自助结账和移动支付的普及使得收银员岗位面临消亡。
-                </div>
-            </details>
-
+                        </div>
+                    </details>
+                    
             <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
                 <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📞 电话推销员</summary>
                 <div class="mt-2 text-gray-600 pl-4">
                     智能客服和自动化营销系统的广泛应用正在取代传统电话推销员。
-                </div>
-            </details>
-
+                        </div>
+                    </details>
+                    
             <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
                 <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">⌨️ 数据录入员</summary>
                 <div class="mt-2 text-gray-600 pl-4">
                     自动化数据采集和处理技术使得人工数据录入岗位逐渐被淘汰。
-                </div>
-            </details>
-
+                        </div>
+                    </details>
+                    
             <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
                 <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📰 报纸印刷工</summary>
                 <div class="mt-2 text-gray-600 pl-4">
                     数字媒体的兴起导致传统印刷行业萎缩，相关岗位需求大幅减少。
-                </div>
-            </details>
-
+                        </div>
+                    </details>
+                    
             <details class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
                 <summary class="font-semibold text-gray-700 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded">📠 传真机操作员</summary>
                 <div class="mt-2 text-gray-600 pl-4">
                     电子邮件和即时通讯工具的普及使得传真机及相关操作岗位逐渐消失。
+                        </div>
+                    </details>
                 </div>
-            </details>
-        </div>
     </main>
 
-    <!-- 页脚部分 -->
-    <footer class="bg-white border-t border-gray-200 mt-16 py-6">
-        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500">
-            <p>© 2023 AI职业预测. 保留所有权利.</p>
-        </div>
-    </footer>
+    <!-- 页脚容器 -->
+    <div id="footer-container"></div>
+    
+    <!-- 加载页脚组件脚本 -->
+    <script src="footer-component.js"></script>
 
     <script>
         // 为details元素添加动画效果
@@ -118,6 +117,60 @@
                 });
             });
         });
+
+        // 修改checkLoginStatus函数，支持自定义头像
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName') || '用户';
+            const userAvatar = localStorage.getItem('userAvatar');
+            const avatarBg = localStorage.getItem('userAvatarColor') || 'bg-blue-100';
+            const avatarText = localStorage.getItem('userAvatarTextColor') || 'text-blue-600';
+            const navAuthElement = document.getElementById('nav-auth');
+            
+            if (isLoggedIn && userEmail) {
+                // 用户已登录，显示用户头像和下拉菜单
+                const userInitial = userName.charAt(0).toUpperCase();
+                
+                let avatarHTML = '';
+                if (userAvatar) {
+                    avatarHTML = `<img src="${userAvatar}" alt="用户头像" class="w-8 h-8 rounded-full object-cover">`;
+                } else {
+                    avatarHTML = `<div class="w-8 h-8 ${avatarBg} rounded-full flex items-center justify-center ${avatarText} font-bold">${userInitial}</div>`;
+                }
+                
+                navAuthElement.innerHTML = `
+                    <div class="relative group">
+                        <a href="profile.html" class="flex items-center space-x-2 py-2 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">
+                            ${avatarHTML}
+                            <span class="hidden md:inline">${userName}</span>
+                        </a>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">个人主页</a>
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+                `;
+                
+                // 添加退出登录功能
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userAvatar');
+                    localStorage.removeItem('userAvatarColor');
+                    localStorage.removeItem('userAvatarTextColor');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                // 用户未登录，显示登录和注册按钮
+                navAuthElement.innerHTML = `
+                    <a href="login.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-blue-600 transition duration-300">登录</a>
+                    <a href="register.html" class="py-4 px-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">注册</a>
+                `;
+            }
+        }
     </script>
 </body>
-</html> 
+</html>
